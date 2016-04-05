@@ -38,17 +38,24 @@ mean_speed_list = []
 distance_list = []
 tier1_count = tier2_count = tier3_count = 0
 
+
+def pullStatsFromRun(activity):
+    duration = activity['duration']
+    duration = float(duration) / 60; #convert to minutes
+    
+    mean_speed = activity['mean_speed']
+    distance = activity['distance']
+    distance = distance * 0.621 #convert to miles
+
+    return (duration, mean_speed, distance)
+
+
 def addToLists(decoded_json):
     for activity in decoded_json['activities']:
         if activity['mode'] != 'outdoor' and activity['mode'] != 'treadmill': #ignore exercise that isn't running
             continue
 
-        duration = activity['duration']
-        duration = float(duration) / 60; #convert to minutes
-        
-        mean_speed = activity['mean_speed']
-        distance = activity['distance']
-        distance = distance * 0.621 #convert to miles
+        (duration, mean_speed, distance) = pullStatsFromRun(activity)
 
         #enforce minimums
         if duration < MIN_DURATION or distance < MIN_DISTANCE:
@@ -99,7 +106,7 @@ def scoreRun(person, duration_list_in, mean_speed_list_in, distance_list_in):
     score = 0
     currentRuns = person.getCurrentWeekRuns()
 
-    
+
 
     mean_speed = person['mean_speed']
     avg_mean_speed = float(sum(mean_speed_list_in)) / len(mean_speed_list_in)

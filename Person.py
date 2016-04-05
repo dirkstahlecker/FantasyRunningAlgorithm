@@ -1,3 +1,5 @@
+from main import pullStatsFromRun
+
 class Person:
     weeks = [] #[ [ { duration , mean_speed , distance } ] ]
     currentWeek = 0
@@ -22,3 +24,12 @@ class Person:
 
     def getCurrentWeekRuns():
         return weeks[currentWeek]
+
+    def getCurrentWeekAverages():
+        currentRuns = weeks[currentWeek]
+        duration_list = []
+        mean_speed_list = []
+        distance_list = []
+
+        for run in currentRuns:
+            (duration, mean_speed, distance) = pullStatsFromRun(run)
