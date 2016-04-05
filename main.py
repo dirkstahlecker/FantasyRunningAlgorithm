@@ -2,6 +2,9 @@
 
 import urllib2
 import json
+import numpy as np
+from scipy.stats import norm
+import matplotlib.pyplot as plt
 
 ################ constants ###############################################
 TIER1_DURATION = 60
@@ -16,7 +19,8 @@ NUM_PAGES = 35
 
 ################ methods ###############################################
 def makeRequest(page):
-    req = urllib2.Request('https://pumatrac-geo-api.herokuapp.com/activities?bounds=box:0,0:90,180&page=' + str(page)) #get all data
+    #TODO: error handling on pagination
+    req = urllib2.Request('https://pumatrac-geo-api.herokuapp.com/activities?bounds=box:0,0:90,180&page=' + str(page))
     req.add_header('Authorization', 'Bearer 1cfb51cd69904221818dafc4069f9d61')
     resp = urllib2.urlopen(req)
     content = resp.read()
@@ -48,6 +52,49 @@ def doAnalytics():
     mean_speed_avg = float(sum(mean_speed_list)) / len(mean_speed_list)
     print mean_speed_avg
 
+    graphList()
+
+
+
+
+
+def graphList():
+    data = duration_list
+    mu, std = norm.fit(data)
+    plt.hist(data, bins=25, normed=True, alpha=0.6, color='g')
+
+    xmin, xmax = plt.xlim()
+    x = np.linspace(xmin, xmax, 100)
+    p = norm.pdf(x, mu, std)
+    plt.plot(x, p, 'k', linewidth=2)
+    title = "Fit results: mu = %.2f,  std = %.2f" % (mu, std)
+    plt.title(title)
+
+    plt.show()
+
+'''
+# Generate some data for this demonstration.
+data = norm.rvs(10.0, 2.5, size=500)
+
+# Fit a normal distribution to the data:
+mu, std = norm.fit(data)
+
+# Plot the histogram.
+plt.hist(data, bins=25, normed=True, alpha=0.6, color='g')
+
+# Plot the PDF.
+xmin, xmax = plt.xlim()
+x = np.linspace(xmin, xmax, 100)
+p = norm.pdf(x, mu, std)
+plt.plot(x, p, 'k', linewidth=2)
+title = "Fit results: mu = %.2f,  std = %.2f" % (mu, std)
+plt.title(title)
+
+plt.show()
+'''
+
+
+
 ################ execution ###############################################
 
 #populate the lists from the API data
@@ -56,11 +103,11 @@ for x in range(0,NUM_PAGES):
 
 doAnalytics()
 
+
 #print duration_list
 #print mean_speed_list
 
 
-#utilize distance, duration, mean speed
-
+5
 
 
