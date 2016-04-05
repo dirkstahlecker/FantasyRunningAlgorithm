@@ -5,6 +5,7 @@ import json
 import numpy as np
 from scipy.stats import norm
 import matplotlib.pyplot as plt
+from Person import Person
 
 ################ constants ###############################################
 TIER1_DURATION = 60
@@ -15,9 +16,13 @@ TIER1_SPEED = 8
 TIER2_SPEED = 4
 TIER3_SPEED = 2
 
-NUM_PAGES = 35
+NUM_PAGES = 50
+MIN_DURATION = 10 #minutes
+MIN_DISTANCE = 0.25 #miles
+MAX_DISTANCE = 200 #miles
+MAX_DURATION = 20*60 #minutes
 
-################ methods ###############################################
+################ Get data ###############################################
 def makeRequest(page):
     #TODO: error handling on pagination
     req = urllib2.Request('https://pumatrac-geo-api.herokuapp.com/activities?bounds=box:0,0:90,180&page=' + str(page))
@@ -30,6 +35,7 @@ def makeRequest(page):
 #initialize list holders
 duration_list = []
 mean_speed_list = []
+distance_list = []
 tier1_count = tier2_count = tier3_count = 0
 
 def addToLists(decoded_json):
@@ -39,22 +45,70 @@ def addToLists(decoded_json):
 
         duration = activity['duration']
         duration = float(duration) / 60; #convert to minutes
-        duration_list.append(duration)
+        
         mean_speed = activity['mean_speed']
+        distance = activity['distance']
+        distance = distance * 0.621 #convert to miles
+
+        #enforce minimums
+        if duration < MIN_DURATION or distance < MIN_DISTANCE:
+            continue
+        #weed out unreasonable maximums
+        if duration > MAX_DURATION or distance > MAX_DURATION:
+            continue
+        
         mean_speed_list.append(mean_speed)
+        duration_list.append(duration)
+        distance_list.append(distance)
 
 def doAnalytics():
     #average of each
     print 'Average duration: ',
     duration_avg = float(sum(duration_list)) / len(duration_list)
     print duration_avg
-    print 'Average mean speed ',
+    print 'Max duration: ',
+    print max(duration_list)
+    print 'Average mean speed: ',
     mean_speed_avg = float(sum(mean_speed_list)) / len(mean_speed_list)
     print mean_speed_avg
+    print 'Average distance: ',
+    distance_list_avg = float(sum(distance_list)) / len(distance_list)
+    print distance_list_avg
+    print 'Max distance: ',
+    print max(distance_list)
+    print 'Min distance: ',
+    print min(distance_list)
 
-    graphList()
+    #graphList()
 
 
+################ Score and Analyze ###############################################
+def getTier(duration_list_in, mean_speed_list_in): #inputs are lists of a single person's runs
+    pass
+
+
+def checkGoal(goal, runs):
+    return True
+
+
+#constants for scoring
+MEAN_SPEED_DIFF_PROP_CONST = 2
+
+#run: [ { duration , mean_speed , distance } ]
+def scoreRun(person, duration_list_in, mean_speed_list_in, distance_list_in):
+    score = 0
+    currentRuns = person.getCurrentWeekRuns()
+
+    
+
+    mean_speed = person['mean_speed']
+    avg_mean_speed = float(sum(mean_speed_list_in)) / len(mean_speed_list_in)
+    score += (mean_speed - avg_mean_speed) * MEAN_SPEED_DIFF_PROP_CONST
+
+    duration = runs['duration']
+
+
+    distance = runs['distance']
 
 
 
@@ -106,8 +160,4 @@ doAnalytics()
 
 #print duration_list
 #print mean_speed_list
-
-
-5
-
 
