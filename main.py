@@ -6,6 +6,7 @@ import numpy as np
 from scipy.stats import norm
 import matplotlib.pyplot as plt
 import Person
+import Goal
 
 ################ constants ###############################################
 TIER1_DURATION = 60
@@ -47,6 +48,13 @@ def pullStatsFromRun(activity):
     distance = activity['distance']
     distance = distance * 0.621 #convert to miles
 
+    #enforce minimums
+    if duration < MIN_DURATION or distance < MIN_DISTANCE:
+        return None
+    #weed out unreasonable maximums
+    if duration > MAX_DURATION or distance > MAX_DURATION:
+        return None
+
     return (duration, mean_speed, distance)
 
 
@@ -56,13 +64,6 @@ def addToLists(decoded_json):
             continue
 
         (duration, mean_speed, distance) = pullStatsFromRun(activity)
-
-        #enforce minimums
-        if duration < MIN_DURATION or distance < MIN_DISTANCE:
-            continue
-        #weed out unreasonable maximums
-        if duration > MAX_DURATION or distance > MAX_DURATION:
-            continue
         
         mean_speed_list.append(mean_speed)
         duration_list.append(duration)
@@ -102,20 +103,13 @@ def checkGoal(goal, runs):
 MEAN_SPEED_DIFF_PROP_CONST = 2
 
 #run: [ { duration , mean_speed , distance } ]
-def scoreRun(person, duration_list_in, mean_speed_list_in, distance_list_in):
+def scoreRun(person, goal, duration_list_in, mean_speed_list_in, distance_list_in):
     score = 0
+    if checkGoal(goal):
+        score += goal.completedValue()
     currentRuns = person.getCurrentWeekRuns()
 
-
-
-    mean_speed = person['mean_speed']
-    avg_mean_speed = float(sum(mean_speed_list_in)) / len(mean_speed_list_in)
-    score += (mean_speed - avg_mean_speed) * MEAN_SPEED_DIFF_PROP_CONST
-
-    duration = runs['duration']
-
-
-    distance = runs['distance']
+    (duration_avg, mean_speed_avg, distance_avg) = person.getCurrentWeekAverages()
 
 
 
