@@ -5,7 +5,7 @@ import json
 import numpy as np
 from scipy.stats import norm
 import matplotlib.pyplot as plt
-from Person import Person
+import Person
 
 ################ constants ###############################################
 TIER1_DURATION = 60

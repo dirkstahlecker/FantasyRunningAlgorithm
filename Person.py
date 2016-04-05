@@ -16,7 +16,7 @@ class Person:
         return True
 
     def newWeek():
-        currentWeek++
+        currentWeek = currentWeek + 1
         weeks[currentWeek] = []
 
     def getRunsAtWeek(week):
