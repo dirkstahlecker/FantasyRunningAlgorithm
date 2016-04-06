@@ -5,7 +5,7 @@ import json
 import numpy as np
 from scipy.stats import norm
 import matplotlib.pyplot as plt
-import Person
+from Person import *
 import Goal
 
 ################ constants ###############################################
@@ -17,7 +17,7 @@ TIER1_SPEED = 8
 TIER2_SPEED = 4
 TIER3_SPEED = 2
 
-NUM_PAGES = 50
+NUM_PAGES = 2
 MIN_DURATION = 10 #minutes
 MIN_DISTANCE = 0.25 #miles
 MAX_DISTANCE = 200 #miles
@@ -57,17 +57,46 @@ def pullStatsFromRun(activity):
 
     return (duration, mean_speed, distance)
 
-
-def addToLists(decoded_json):
+people = {}
+id_list = []
+def addToLists(decoded_json): #this method gets called multiple times (once per page)
+    ID_to_test = None
     for activity in decoded_json['activities']:
         if activity['mode'] != 'outdoor' and activity['mode'] != 'treadmill': #ignore exercise that isn't running
             continue
 
-        (duration, mean_speed, distance) = pullStatsFromRun(activity)
+        try:
+            (duration, mean_speed, distance) = pullStatsFromRun(activity)
+            thisRun = (duration, mean_speed, distance)
+        except:
+            continue
         
         mean_speed_list.append(mean_speed)
         duration_list.append(duration)
         distance_list.append(distance)
+
+        ID = activity['id']
+
+        if ID_to_test == None:
+            ID_to_test = ID
+        
+        #new ID
+        if ID not in id_list:
+            #create person and add to dictionary
+            person = PersonClass(ID)
+            print 'adding: ',
+            print thisRun
+            person.addRun(thisRun)
+            people[ID] = person
+            id_list.append(ID)
+            print people[ID].weeks
+        #seen this ID before
+        else:
+            #append new info to the dictionary
+            people[ID].addRun(thisRun)
+
+        return ID_to_test
+
 
 def doAnalytics():
     #average of each
@@ -95,21 +124,34 @@ def getTier(duration_list_in, mean_speed_list_in): #inputs are lists of a single
     pass
 
 
-def checkGoal(goal, runs):
-    return True
+def checkGoal(goal, person):
+    if True:
+        return goal.completedValue()
+    return 0
+    #TODO: fill this in
 
 
 #constants for scoring
 MEAN_SPEED_DIFF_PROP_CONST = 2
 
-#run: [ { duration , mean_speed , distance } ]
+
 def scoreRun(person, goal, duration_list_in, mean_speed_list_in, distance_list_in):
     score = 0
-    if checkGoal(goal):
-        score += goal.completedValue()
-    currentRuns = person.getCurrentWeekRuns()
+    #score += checkGoal()
 
-    (duration_avg, mean_speed_avg, distance_avg) = person.getCurrentWeekAverages()
+    currentRuns = person.getCurrentWeekRuns()
+    currentRuns = person.getMostRecentRun()
+    #ASSUMPTION: only look at most recent run, in place of most recent week. Week infrastructure is long and complicated
+    #(duration_avg, mean_speed_avg, distance_avg) = person.getCurrentWeekAverages() 
+    
+    (duration_total, mean_speed_total, distance_total) = person.getTotalAverages()
+    duration_diff = duration_avg - duration_total
+    mean_speed_diff = mean_speed_avg - mean_speed_total
+    distance_diff = distance_avg - distance_total
+
+    print duration_diff
+    print mean_speed_diff
+    print distance_diff
 
 
 
@@ -152,11 +194,27 @@ plt.show()
 
 ################ execution ###############################################
 
-#populate the lists from the API data
-for x in range(0,NUM_PAGES):
-    addToLists(makeRequest(x))
 
-doAnalytics()
+def main():
+    #populate the lists from the API data
+    ID_to_test = None
+    for x in range(0,NUM_PAGES):
+        ID_to_test = addToLists(makeRequest(x))
+
+    doAnalytics()
+    '''
+    req = urllib2.Request('https://pumatrac-geo-api.herokuapp.com/activities?bounds=box:0,0:90,180&page=0')
+    req.add_header('Authorization', 'Bearer 1cfb51cd69904221818dafc4069f9d61')
+    resp = urllib2.urlopen(req)
+    content = resp.read()
+    #userID = content['activities'][0]['id']
+    '''
+    scoreRun(people[ID_to_test], None, duration_list, mean_speed_list, distance_list)
+
+if __name__ == "__main__":
+    main()
+
+
 
 
 #print duration_list

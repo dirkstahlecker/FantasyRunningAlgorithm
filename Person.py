@@ -1,35 +1,57 @@
-from main import pullStatsFromRun
+#from main import pullStatsFromRun
 
-class Person:
-    weeks = [] #[ [ { duration , mean_speed , distance } ] ]
+def pullStatsFromRun(activity):
+    (duration, mean_speed, distance) = activity
+
+    duration = float(duration) / 60; #convert to minutes
+    distance = distance * 0.621 #convert to miles
+
+    ''' #not necessary because of already being taken into account?
+    #enforce minimums
+    if duration < MIN_DURATION or distance < MIN_DISTANCE:
+        return None
+    #weed out unreasonable maximums
+    if duration > MAX_DURATION or distance > MAX_DURATION:
+        return None
+    '''
+
+    return (duration, mean_speed, distance)
+
+class PersonClass:
+    ID = ''
+    weeks = {} # { week : [ run ] } #TODO: update this to reflect multiple weeks
     currentWeek = 0
 
-    def __init__():
-        weeks[0] = []
+    def __init__(self, id_in):
+        self.ID = id_in
+        self.weeks[self.currentWeek] = []
 
-    def addRun(run):
+    def addRun(self, run):
         if len(run) != 3:
             return False
-        if type(run) != dict:
-            return False
-        weeks[currentWeek].append(run)
+        self.weeks[self.currentWeek].append(run)
         return True
 
-    def newWeek():
-        currentWeek = currentWeek + 1
-        weeks[currentWeek] = []
+    def newWeek(self):
+        self.currentWeek = self.currentWeek + 1
+        self.weeks[self.currentWeek] = []
 
-    def getRunsAtWeek(week):
-        return weeks[week]
+    def getRunsAtWeek(self, week):
+        return self.weeks[week]
 
-    def getCurrentWeekRuns():
-        return weeks[currentWeek]
+    def getCurrentWeekRuns(self):
+        try:
+            return self.weeks[self.currentWeek]
+        except:
+            return None
 
-    def getCurrentWeekAverages():
-        currentRuns = weeks[currentWeek]
+    def averagesHelper(self, currentRuns):
         duration_list = []
         mean_speed_list = []
         distance_list = []
+
+        print 'currentRuns: ',
+        print currentRuns
 
         for run in currentRuns:
             (duration, mean_speed, distance) = pullStatsFromRun(run)
@@ -42,3 +64,33 @@ class Person:
         distance_avg = float(sum(distance_list)) / len(distance_list)
 
         return (duration_avg, mean_speed_avg, distance_avg)
+
+    def getCurrentWeekAverages(self):
+        return self.averagesHelper(self.weeks[self.currentWeek])
+
+    def getTotalAverages(self):
+        '''
+        runs = []
+        for week in self.weeks:
+            runs.append(week)
+        '''
+        return self.averagesHelper(self.weeks[self.currentWeek]) #runs
+
+    def getMostRecentRun(self):
+        week = self.weeks[self.currentWeek] #TODO: make this the most recent week
+        print 'week: ',
+        print week
+        return week
+
+    #needed to be a value in a dictionary
+    def __hash__(self):
+        return hash((self.ID))
+
+    def __eq__(self, other):
+        return (self.ID) == (other.ID)
+
+    def __ne__(self, other):
+        # Not strictly necessary, but to avoid having both x==y and x!=y
+        # True at the same time
+        return not(self == other)
+
