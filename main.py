@@ -6,6 +6,7 @@ import numpy as np
 from scipy.stats import norm
 import matplotlib.pyplot as plt
 from Person import *
+import yaml
 import Goal
 
 ################ constants ###############################################
@@ -96,6 +97,43 @@ def addToLists(decoded_json): #this method gets called multiple times (once per 
             people[ID].addRun(thisRun)
 
         return ID_to_test
+
+
+
+def saveDataToFile(file_name, num_pages):
+    if num_pages == 0:
+        print 'num_pages must be greater than 0'
+        return
+
+    all_data = makeRequest(0)
+
+    for i in range(num_pages - 1):
+        data = makeRequest(i + 1)
+        all_data['activities'] = all_data['activities'] + data['activities']
+
+    #add data to file
+    with open(file_name, 'w') as outfile:
+        json.dump(all_data, outfile)
+
+
+def addToListsFromFile(file_name):
+
+    # load data from file
+    with open(file_name) as data_file:
+        data = yaml.load(data_file)
+
+    for activity in data['activities']:
+        if activity['mode'] != 'outdoor' and activity['mode'] != 'treadmill':  # ignore exercise that isn't running
+            continue
+
+        stats = pullStatsFromRun(activity)
+        # in case stats is a NoneType
+        if (stats):
+            (duration, mean_speed, distance) = stats
+            mean_speed_list.append(mean_speed)
+            duration_list.append(duration)
+            distance_list.append(distance)
+
 
 
 def doAnalytics():

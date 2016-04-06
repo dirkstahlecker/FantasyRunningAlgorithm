@@ -67,13 +67,11 @@ def saveDataToFile(file_name, num_pages):
     #add data to file
     with open(file_name, 'w') as outfile:
         json.dump(all_data, outfile)
-        # for a in all_data:
-        #     outfile.write((a + u'\n').encode('unicode-escape'))
 
-    return
 
 def addToListsFromFile(file_name):
 
+    # load data from file
     with open(file_name) as data_file:
         data = yaml.load(data_file)
 
@@ -82,6 +80,7 @@ def addToListsFromFile(file_name):
             continue
 
         stats = pullStatsFromRun(activity)
+        # in case stats is a NoneType
         if (stats):
             (duration, mean_speed, distance) = stats
             mean_speed_list.append(mean_speed)
