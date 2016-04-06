@@ -171,14 +171,15 @@ def checkGoal(goal, person):
 
 #constants for scoring
 MEAN_SPEED_DIFF_PROP_CONST = 2
-
+DURATION_PROP_CONST = 1
+DISTANCE_PROP_CONST = 1
 
 def scoreRun(person, goal, duration_list_in, mean_speed_list_in, distance_list_in):
     score = 0
     #score += checkGoal()
 
     #currentRuns = person.getCurrentWeekRuns()
-    currentRun = person.getMostRecentRun()
+    currentRun = person.getMostRecentRun()[0]
     print 'currentRun',
     print currentRun
     #ASSUMPTION: only look at most recent run, in place of most recent week. Week infrastructure is long and complicated
@@ -189,7 +190,7 @@ def scoreRun(person, goal, duration_list_in, mean_speed_list_in, distance_list_i
     duration_diff = duration_avg - duration_total
     mean_speed_diff = mean_speed_avg - mean_speed_total
     distance_diff = distance_avg - distance_total
-    
+    '''
     duration_diff = currentRun[0] - duration_total
     mean_speed_diff = currentRun[1] - mean_speed_total
     distance_diff = currentRun[2] - distance_total
@@ -197,7 +198,13 @@ def scoreRun(person, goal, duration_list_in, mean_speed_list_in, distance_list_i
     print duration_diff
     print mean_speed_diff
     print distance_diff
-    '''
+
+    score += duration_diff * MEAN_SPEED_DIFF_PROP_CONST
+    score += mean_speed_diff * MEAN_SPEED_DIFF_PROP_CONST
+    score += distance_diff * DISTANCE_PROP_CONST
+
+    return score
+    
 
 
 
