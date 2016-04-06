@@ -143,16 +143,16 @@ def scoreRun(person, goal, duration_list_in, mean_speed_list_in, distance_list_i
     currentRuns = person.getMostRecentRun()
     #ASSUMPTION: only look at most recent run, in place of most recent week. Week infrastructure is long and complicated
     #(duration_avg, mean_speed_avg, distance_avg) = person.getCurrentWeekAverages() 
-    
+    ''' #TODO: put this back in
     (duration_total, mean_speed_total, distance_total) = person.getTotalAverages()
     duration_diff = duration_avg - duration_total
     mean_speed_diff = mean_speed_avg - mean_speed_total
     distance_diff = distance_avg - distance_total
-
+    
     print duration_diff
     print mean_speed_diff
     print distance_diff
-
+    '''
 
 
 def graphList():
