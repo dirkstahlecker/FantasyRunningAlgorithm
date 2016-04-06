@@ -7,7 +7,7 @@ from scipy.stats import norm
 import matplotlib.pyplot as plt
 from Person import *
 import yaml
-import Goal
+from Goal import *
 
 ################ constants ###############################################
 TIER1_DURATION = 60
@@ -93,7 +93,7 @@ def addToLists(decoded_json): #this method gets called multiple times (once per 
             #append new info to the dictionary
             people[ID].addRun(thisRun)
 
-        return ID_to_test
+        return ID_to_test #used to find a particular user ID, can remove once this is no longer necessary
 
 
 
@@ -141,8 +141,6 @@ def doAnalytics():
     print duration_avg
     print 'Max duration: ',
     print max(duration_list)
-    print 'mean_speed_list: ',
-    print mean_speed_list
     mean_speed_avg = float(sum(mean_speed_list)) / len(mean_speed_list)
     print mean_speed_avg
     print 'Average distance: ',
@@ -231,7 +229,7 @@ def main():
         ID_to_test = addToLists(makeRequest(x))
 
     doAnalytics()
-    graphList()
+    
     '''
     req = urllib2.Request('https://pumatrac-geo-api.herokuapp.com/activities?bounds=box:0,0:90,180&page=0')
     req.add_header('Authorization', 'Bearer 1cfb51cd69904221818dafc4069f9d61')
@@ -240,13 +238,8 @@ def main():
     #userID = content['activities'][0]['id']
     '''
     scoreRun(people[ID_to_test], None, duration_list, mean_speed_list, distance_list)
+    graphList()
 
 if __name__ == "__main__":
     main()
-
-
-
-
-#print duration_list
-#print mean_speed_list
 
