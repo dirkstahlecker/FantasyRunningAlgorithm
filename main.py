@@ -18,7 +18,7 @@ TIER1_SPEED = 8
 TIER2_SPEED = 4
 TIER3_SPEED = 2
 
-NUM_PAGES = 2
+NUM_PAGES = 50
 MIN_DURATION = 10 #minutes
 MIN_DISTANCE = 0.25 #miles
 MAX_DISTANCE = 200 #miles
@@ -85,12 +85,9 @@ def addToLists(decoded_json): #this method gets called multiple times (once per 
         if ID not in id_list:
             #create person and add to dictionary
             person = PersonClass(ID)
-            print 'adding: ',
-            print thisRun
             person.addRun(thisRun)
             people[ID] = person
             id_list.append(ID)
-            print people[ID].weeks
         #seen this ID before
         else:
             #append new info to the dictionary
@@ -144,7 +141,8 @@ def doAnalytics():
     print duration_avg
     print 'Max duration: ',
     print max(duration_list)
-    print 'Average mean speed: ',
+    print 'mean_speed_list: ',
+    print mean_speed_list
     mean_speed_avg = float(sum(mean_speed_list)) / len(mean_speed_list)
     print mean_speed_avg
     print 'Average distance: ',
@@ -155,7 +153,6 @@ def doAnalytics():
     print 'Min distance: ',
     print min(distance_list)
 
-    #graphList()
 
 
 ################ Score and Analyze ###############################################
@@ -181,8 +178,6 @@ def scoreRun(person, goal, duration_list_in, mean_speed_list_in, distance_list_i
 
     #currentRuns = person.getCurrentWeekRuns()
     currentRun = person.getMostRecentRun()[0]
-    print 'currentRun',
-    print currentRun
     #ASSUMPTION: only look at most recent run, in place of most recent week. Week infrastructure is long and complicated
     #(duration_avg, mean_speed_avg, distance_avg) = person.getCurrentWeekAverages() 
     
@@ -196,21 +191,19 @@ def scoreRun(person, goal, duration_list_in, mean_speed_list_in, distance_list_i
     mean_speed_diff = currentRun[1] - mean_speed_total
     distance_diff = currentRun[2] - distance_total
 
-    print duration_diff
-    print mean_speed_diff
-    print distance_diff
-
     score += duration_diff * MEAN_SPEED_DIFF_PROP_CONST
     score += mean_speed_diff * MEAN_SPEED_DIFF_PROP_CONST
     score += distance_diff * DISTANCE_PROP_CONST
+
+    print 'Score: ',
+    print score
 
     return score
     
 
 
-
 def graphList():
-    data = duration_list
+    data = mean_speed_list
     mu, std = norm.fit(data)
     plt.hist(data, bins=25, normed=True, alpha=0.6, color='g')
 
@@ -232,12 +225,13 @@ def main():
     #populate the lists from the API data
     # get some new data by uncommenting this
     # saveDataToFile('data.txt', NUM_PAGES)
-    data = getDataFromFile('data.txt')
-    ID_to_test = addToLists(data)
-    # for x in range(0,NUM_PAGES):
-    #     ID_to_test = addToLists(makeRequest(x))
+    #data = getDataFromFile('data.txt')
+    #ID_to_test = addToLists(data)
+    for x in range(0,NUM_PAGES):
+        ID_to_test = addToLists(makeRequest(x))
 
     doAnalytics()
+    graphList()
     '''
     req = urllib2.Request('https://pumatrac-geo-api.herokuapp.com/activities?bounds=box:0,0:90,180&page=0')
     req.add_header('Authorization', 'Bearer 1cfb51cd69904221818dafc4069f9d61')
