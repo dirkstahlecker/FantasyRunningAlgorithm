@@ -116,23 +116,24 @@ def saveDataToFile(file_name, num_pages):
         json.dump(all_data, outfile)
 
 
-def addToListsFromFile(file_name):
+def getDataFromFile(file_name):
 
     # load data from file
     with open(file_name) as data_file:
         data = yaml.load(data_file)
 
-    for activity in data['activities']:
-        if activity['mode'] != 'outdoor' and activity['mode'] != 'treadmill':  # ignore exercise that isn't running
-            continue
-
-        stats = pullStatsFromRun(activity)
-        # in case stats is a NoneType
-        if (stats):
-            (duration, mean_speed, distance) = stats
-            mean_speed_list.append(mean_speed)
-            duration_list.append(duration)
-            distance_list.append(distance)
+    return data
+    # for activity in data['activities']:
+    #     if activity['mode'] != 'outdoor' and activity['mode'] != 'treadmill':  # ignore exercise that isn't running
+    #         continue
+    #
+    #     stats = pullStatsFromRun(activity)
+    #     # in case stats is a NoneType
+    #     if (stats):
+    #         (duration, mean_speed, distance) = stats
+    #         mean_speed_list.append(mean_speed)
+    #         duration_list.append(duration)
+    #         distance_list.append(distance)
 
 
 
@@ -229,9 +230,12 @@ def graphList():
 
 def main():
     #populate the lists from the API data
-    ID_to_test = None
-    for x in range(0,NUM_PAGES):
-        ID_to_test = addToLists(makeRequest(x))
+    # get some new data by uncommenting this
+    # saveDataToFile('data.txt', NUM_PAGES)
+    data = getDataFromFile('data.txt')
+    ID_to_test = addToLists(data)
+    # for x in range(0,NUM_PAGES):
+    #     ID_to_test = addToLists(makeRequest(x))
 
     doAnalytics()
     '''
