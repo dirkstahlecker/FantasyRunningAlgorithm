@@ -34,7 +34,6 @@ def pullStatsFromRun(activity):
         print 'invalid date: ',
         print date
         return None
-    print 'returning a run'
     return Run(duration, mean_speed, distance, date)
 
 
@@ -45,7 +44,6 @@ class Run:
     date = None
 
     def __init__(self, duration, mean_speed, distance, date):
-        print 'init'
         self.duration = duration
         self.mean_speed = mean_speed
         self.distance = distance

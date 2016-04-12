@@ -38,10 +38,9 @@ distance_list = []
 tier1_count = tier2_count = tier3_count = 0
 
 
-people = {}
+people = {} # { ID : person }
 id_list = []
 def addToLists(decoded_json): #this method gets called multiple times (once per page)
-    ID_to_test = None
     for activity in decoded_json['activities']:
         if activity['mode'] != 'outdoor' and activity['mode'] != 'treadmill': #ignore exercise that isn't running
             continue
@@ -60,12 +59,9 @@ def addToLists(decoded_json): #this method gets called multiple times (once per 
         distance_list.append(thisRun.distance)
 
         ID = activity['id']
-
-        if ID_to_test == None:
-            ID_to_test = ID
         
         #new ID
-        if ID not in id_list:
+        if ID not in people:
             #create person and add to dictionary
             person = PersonClass(ID, None)
             person.addRun(thisRun)
@@ -75,8 +71,6 @@ def addToLists(decoded_json): #this method gets called multiple times (once per 
         else:
             #append new info to the dictionary
             people[ID].addRun(thisRun)
-
-    return ID_to_test #used to find a particular user ID, can remove once this is no longer necessary
 
 
 
@@ -229,11 +223,22 @@ def doData():
     # get some new data by uncommenting this
     # saveDataToFile('data.txt', NUM_PAGES)
     #data = getDataFromFile('data.txt')
-    #ID_to_test = addToLists(data)
+    #addToLists(data)
     for x in range(0,NUM_PAGES):
-        ID_to_test = addToLists(makeRequest(x))
+        addToLists(makeRequest(x))
 
+    count = 0
     doAnalytics()
+
+
+    
+    for person in people:
+        print person
+        print people[person].weeks
+        print '\n'
+        if count > 5:
+            break
+        count += 1
     
     '''
     req = urllib2.Request('https://pumatrac-geo-api.herokuapp.com/activities?bounds=box:0,0:90,180&page=0')
@@ -242,8 +247,14 @@ def doData():
     content = resp.read()
     #userID = content['activities'][0]['id']
     '''
-    scoreRun(people[ID_to_test], None, duration_list, mean_speed_list, distance_list)
-    makeGoals()
+    
+
+    #TODO: reenable 
+    #scoreRun(people[u'9c8e0baf-2221-4889-a710-f77496f93c8e'], None, duration_list, mean_speed_list, distance_list)
+    #makeGoals()
+    
+
+
     #graphList()
 
 #main control loop
@@ -262,6 +273,7 @@ def main():
         print '\n\n'
     '''
     doData()
+
 if __name__ == "__main__":
     main()
 

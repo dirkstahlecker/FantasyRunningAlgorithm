@@ -5,13 +5,11 @@ from Run import *
 class PersonClass:
     ID = ''
     weeks = {} # { weekHash : [ run ] } #TODO: update this to reflect multiple weeks
-    currentWeek = 0 #should be unnecessary with the new weekHash implementation
-    currentWeekDate = None
+    #currentWeek = 0 #should be unnecessary with the new weekHash implementation
     goal = None
 
     def __init__(self, id_in, goal):
         self.ID = id_in
-        self.weeks[self.currentWeek] = []
         self.goal = goal
 
     #TODO: this may or may not atually return the proper values
@@ -19,9 +17,18 @@ class PersonClass:
         #hash each date to the most recent Sunday (since weeks start on Sundays)
         dayOfWeek = date.weekday()
         dateRet = date - datetime.timedelta(6 - dayOfWeek)
-        print 'dateRet: ',
-        print dateRet
-        return int(dateRet.year + dateRet.month + dateRet.day)
+
+        hashStr = str(dateRet.year)
+        s = str(dateRet.month)
+        if len(s) == 1:
+            s = '0' + s
+        hashStr += s
+        d = str(dateRet.day)
+        if len(d) == 1:
+            d = '0' + d
+        hashStr += d
+
+        return int(hashStr)
     '''
     def getWeekOfRun(self, run):
         date = run.date
