@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 from Person import *
 import yaml
 from Goal import *
-from Run import pullStatsFromRun
+from Run import *
 
 ################ constants ###############################################
 TIER1_DURATION = 60
@@ -47,16 +47,17 @@ def addToLists(decoded_json): #this method gets called multiple times (once per 
             continue
 
         try:
-            (duration, mean_speed, distance) = pullStatsFromRun(activity)
-            print 'duration: ',
-            print duration
-            thisRun = (duration, mean_speed, distance)
+            thisRun = pullStatsFromRun(activity)
         except:
+            print 'excepting'
             continue
-        
-        mean_speed_list.append(mean_speed)
-        duration_list.append(duration)
-        distance_list.append(distance)
+
+        if thisRun == None:
+            continue
+
+        mean_speed_list.append(thisRun.mean_speed)
+        duration_list.append(thisRun.duration)
+        distance_list.append(thisRun.distance)
 
         ID = activity['id']
 
@@ -75,8 +76,6 @@ def addToLists(decoded_json): #this method gets called multiple times (once per 
             #append new info to the dictionary
             people[ID].addRun(thisRun)
 
-    print 'duration_list: ',
-    print duration_list
     return ID_to_test #used to find a particular user ID, can remove once this is no longer necessary
 
 
@@ -168,9 +167,9 @@ def scoreRun(person, goal, duration_list_in, mean_speed_list_in, distance_list_i
     mean_speed_diff = mean_speed_avg - mean_speed_total
     distance_diff = distance_avg - distance_total
     '''
-    duration_diff = currentRun[0] - duration_total
-    mean_speed_diff = currentRun[1] - mean_speed_total
-    distance_diff = currentRun[2] - distance_total
+    duration_diff = currentRun.duration - duration_total
+    mean_speed_diff = currentRun.mean_speed - mean_speed_total
+    distance_diff = currentRun.distance - distance_total
 
     score += duration_diff * MEAN_SPEED_DIFF_PROP_CONST
     score += mean_speed_diff * MEAN_SPEED_DIFF_PROP_CONST

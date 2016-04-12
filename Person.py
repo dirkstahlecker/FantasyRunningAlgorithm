@@ -13,15 +13,11 @@ class PersonClass:
         self.weeks[self.currentWeek] = []
         self.goal = goal
 
-    def getDateFromRun(self, run):
-        pass
-
     def isCurrentWeek(self, run):
         pass
 
+    #run: Run object
     def addRun(self, run):
-        if len(run) != 3:
-            return False
         self.weeks[self.currentWeek].append(run)
         return True
 
@@ -38,6 +34,7 @@ class PersonClass:
         except:
             return None
 
+    #currentRuns: [ Run ]
     def averagesHelper(self, currentRuns):
         duration_list = []
         mean_speed_list = []
@@ -47,10 +44,10 @@ class PersonClass:
         print currentRuns
 
         for run in currentRuns:
-            (duration, mean_speed, distance) = pullStatsFromRun(run)
-            duration_list.append(duration)
-            mean_speed_list.append(mean_speed)
-            distance_list.append(distance)
+            #thisRun = pullStatsFromRun(run)
+            duration_list.append(run.duration)
+            mean_speed_list.append(run.mean_speed)
+            distance_list.append(run.distance)
 
         duration_avg = float(sum(duration_list)) / len(duration_list)
         mean_speed_avg = float(sum(mean_speed_list)) / len(mean_speed_list)
