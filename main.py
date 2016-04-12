@@ -49,7 +49,7 @@ def addToLists(decoded_json): #this method gets called multiple times (once per 
         try:
             thisRun = pullStatsFromRun(activity)
         except:
-            print 'excepting'
+            print 'Run was None'
             continue
 
         if thisRun == None:
@@ -248,6 +248,7 @@ def doData():
 
 #main control loop
 def main():
+    '''
     while True:
         print '(S)core run\n(V)iew statistics'
         inp = raw_input('>')
@@ -259,7 +260,8 @@ def main():
             #view stats
             doData()
         print '\n\n'
-
+    '''
+    doData()
 if __name__ == "__main__":
     main()
 

@@ -4,8 +4,9 @@ from Run import *
 
 class PersonClass:
     ID = ''
-    weeks = {} # { week : [ run ] } #TODO: update this to reflect multiple weeks
-    currentWeek = 0
+    weeks = {} # { weekHash : [ run ] } #TODO: update this to reflect multiple weeks
+    currentWeek = 0 #should be unnecessary with the new weekHash implementation
+    currentWeekDate = None
     goal = None
 
     def __init__(self, id_in, goal):
@@ -13,17 +14,45 @@ class PersonClass:
         self.weeks[self.currentWeek] = []
         self.goal = goal
 
-    def isCurrentWeek(self, run):
-        pass
+    #TODO: this may or may not atually return the proper values
+    def getWeekHashForDate(self, date):
+        #hash each date to the most recent Sunday (since weeks start on Sundays)
+        dayOfWeek = date.weekday()
+        dateRet = date - datetime.timedelta(6 - dayOfWeek)
+        print 'dateRet: ',
+        print dateRet
+        return int(dateRet.year + dateRet.month + dateRet.day)
+    '''
+    def getWeekOfRun(self, run):
+        date = run.date
+        weekHash = getWeekHashForDate(date)
 
+        try:
+            weeks[weekHash].append(run)
+        except:
+
+        if weekNum == currentWeek: #in current week, don't need to do anything special
+            weeks[weekNum].append(run)
+        else: #new or old week, so have to first find what week it is
+            weekNum = datetime.date(year, month, day).weekday()
+
+        return 
+    '''
     #run: Run object
     def addRun(self, run):
-        self.weeks[self.currentWeek].append(run)
-        return True
+        week = self.getWeekHashForDate(run.date)
+        try:
+            self.weeks[week].append(run)
+        except:
+            self.weeks[week] = [run]
 
-    def newWeek(self):
+    '''
+    #unnecessary because of week hash
+    def newWeek(self, date):
         self.currentWeek = self.currentWeek + 1
+        currentWeekDate = date
         self.weeks[self.currentWeek] = []
+    '''
 
     def getRunsAtWeek(self, week):
         return self.weeks[week]
