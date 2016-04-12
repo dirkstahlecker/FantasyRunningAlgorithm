@@ -18,7 +18,7 @@ TIER1_SPEED = 8
 TIER2_SPEED = 4
 TIER3_SPEED = 2
 
-NUM_PAGES = 50
+NUM_PAGES = 3
 MIN_DURATION = 10 #minutes
 MIN_DISTANCE = 0.25 #miles
 MAX_DISTANCE = 200 #miles
@@ -84,7 +84,7 @@ def addToLists(decoded_json): #this method gets called multiple times (once per 
         #new ID
         if ID not in id_list:
             #create person and add to dictionary
-            person = PersonClass(ID)
+            person = PersonClass(ID, None)
             person.addRun(thisRun)
             people[ID] = person
             id_list.append(ID)
@@ -133,7 +133,7 @@ def getDataFromFile(file_name):
     #         distance_list.append(distance)
 
 
-
+################ Score and Analyze ###############################################
 def doAnalytics():
     #average of each
     print 'Average duration: ',
@@ -153,7 +153,6 @@ def doAnalytics():
 
 
 
-################ Score and Analyze ###############################################
 def getTier(duration_list_in, mean_speed_list_in): #inputs are lists of a single person's runs
     pass
 
@@ -197,7 +196,7 @@ def scoreRun(person, goal, duration_list_in, mean_speed_list_in, distance_list_i
     print score
 
     return score
-    
+
 
 
 def graphList():
@@ -216,10 +215,33 @@ def graphList():
 
 
 
+goals_list = []
+#used to populate a few goals for the heirarchy
+def makeGoals():
+    goal = Goal(1)
+    goal.params['numRuns'] = 3
+    goal.params['totalDuration'] = 60
+    goals_list.append(goal)
+
+    goal = Goal(2)
+    goal.params['runAvgSpeed'] = 10
+    goal.params['totalDistance'] = 30
+    goals_list.append(goal)
+
+    goal = Goal(3)
+    goal.params['totalDistance'] = 60
+    goal.params['runMinSpeed'] = 8
+    goals_list.append(goal)
+
+
 ################ execution ###############################################
 
+#input 
+def scoreRunViaInput(input):
 
-def main():
+
+
+def doData():
     #populate the lists from the API data
     # get some new data by uncommenting this
     # saveDataToFile('data.txt', NUM_PAGES)
@@ -238,8 +260,28 @@ def main():
     #userID = content['activities'][0]['id']
     '''
     scoreRun(people[ID_to_test], None, duration_list, mean_speed_list, distance_list)
-    graphList()
+    makeGoals()
+    #graphList()
+
+#main control loop
+def main():
+    while True:
+        print '(S)core run\n(V)iew statistics'
+        inp = raw_input('>')
+        inp = inp.strip().lstrip().lower()
+        if inp == 's':
+            #score run
+            pass
+        elif inp == 'v':
+            #view stats
+            doData()
+        print '\n\n'
 
 if __name__ == "__main__":
     main()
+
+
+
+
+
 

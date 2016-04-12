@@ -21,10 +21,12 @@ class PersonClass:
     ID = ''
     weeks = {} # { week : [ run ] } #TODO: update this to reflect multiple weeks
     currentWeek = 0
+    goal = None
 
-    def __init__(self, id_in):
+    def __init__(self, id_in, goal):
         self.ID = id_in
         self.weeks[self.currentWeek] = []
+        self.goal = goal
 
     def addRun(self, run):
         if len(run) != 3:
