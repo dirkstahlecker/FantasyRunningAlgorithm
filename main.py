@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 from Person import *
 import yaml
 from Goal import *
+from Run import pullStatsFromRun
 
 ################ constants ###############################################
 TIER1_DURATION = 60
@@ -19,10 +20,6 @@ TIER2_SPEED = 4
 TIER3_SPEED = 2
 
 NUM_PAGES = 3
-MIN_DURATION = 10 #minutes
-MIN_DISTANCE = 0.25 #miles
-MAX_DISTANCE = 200 #miles
-MAX_DURATION = 20*60 #minutes
 
 ################ Get data ###############################################
 def makeRequest(page):
@@ -41,23 +38,6 @@ distance_list = []
 tier1_count = tier2_count = tier3_count = 0
 
 
-def pullStatsFromRun(activity):
-    duration = activity['duration']
-    duration = float(duration) / 60; #convert to minutes
-    
-    mean_speed = activity['mean_speed']
-    distance = activity['distance']
-    distance = distance * 0.621 #convert to miles
-
-    #enforce minimums
-    if duration < MIN_DURATION or distance < MIN_DISTANCE:
-        return None
-    #weed out unreasonable maximums
-    if duration > MAX_DURATION or distance > MAX_DURATION:
-        return None
-
-    return (duration, mean_speed, distance)
-
 people = {}
 id_list = []
 def addToLists(decoded_json): #this method gets called multiple times (once per page)
@@ -68,6 +48,8 @@ def addToLists(decoded_json): #this method gets called multiple times (once per 
 
         try:
             (duration, mean_speed, distance) = pullStatsFromRun(activity)
+            print 'duration: ',
+            print duration
             thisRun = (duration, mean_speed, distance)
         except:
             continue
@@ -93,7 +75,9 @@ def addToLists(decoded_json): #this method gets called multiple times (once per 
             #append new info to the dictionary
             people[ID].addRun(thisRun)
 
-        return ID_to_test #used to find a particular user ID, can remove once this is no longer necessary
+    print 'duration_list: ',
+    print duration_list
+    return ID_to_test #used to find a particular user ID, can remove once this is no longer necessary
 
 
 
@@ -238,7 +222,7 @@ def makeGoals():
 
 #input 
 def scoreRunViaInput(input):
-
+    pass
 
 
 def doData():

@@ -1,21 +1,6 @@
 #from main import pullStatsFromRun
-
-def pullStatsFromRun(activity):
-    (duration, mean_speed, distance) = activity
-
-    duration = float(duration) / 60; #convert to minutes
-    distance = distance * 0.621 #convert to miles
-
-    ''' #not necessary because of already being taken into account?
-    #enforce minimums
-    if duration < MIN_DURATION or distance < MIN_DISTANCE:
-        return None
-    #weed out unreasonable maximums
-    if duration > MAX_DURATION or distance > MAX_DURATION:
-        return None
-    '''
-
-    return (duration, mean_speed, distance)
+import datetime
+from Run import *
 
 class PersonClass:
     ID = ''
@@ -27,6 +12,12 @@ class PersonClass:
         self.ID = id_in
         self.weeks[self.currentWeek] = []
         self.goal = goal
+
+    def getDateFromRun(self, run):
+        pass
+
+    def isCurrentWeek(self, run):
+        pass
 
     def addRun(self, run):
         if len(run) != 3:
