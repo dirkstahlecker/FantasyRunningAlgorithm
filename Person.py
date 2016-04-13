@@ -89,6 +89,13 @@ class PersonClass:
     def getMostRecentWeekRuns(self):
         return self.weeks[self.currentWeek]
 
+    def getTotalNumberOfRuns(self):
+        count = 0
+        for week in self.weeks:
+            for run in self.weeks[week]:
+                count += 1
+        return count
+
     #needed to be a value in a dictionary
     def __hash__(self):
         return hash((self.ID))

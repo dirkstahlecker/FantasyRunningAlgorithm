@@ -20,7 +20,7 @@ TIER1_SPEED = 8
 TIER2_SPEED = 4
 TIER3_SPEED = 2
 
-NUM_PAGES = 5
+NUM_PAGES = 50
 
 ################ Get data ###############################################
 def makeRequest(page):
@@ -64,7 +64,7 @@ def addToLists(decoded_json): #this method gets called multiple times (once per 
         #new ID
         if ID not in people:
             #create person and add to dictionary
-            person = PersonClass(ID, None)
+            person = PersonClass(ID, goals_list[0])
             person.addRun(thisRun)
             people[ID] = person
             id_list.append(ID)
@@ -216,24 +216,12 @@ def doData():
     # saveDataToFile('data.txt', NUM_PAGES)
     #data = getDataFromFile('data.txt')
     #addToLists(data)
+    makeGoals()
+
     for x in range(0,NUM_PAGES):
         addToLists(makeRequest(x))
 
-    count = 0
-    doAnalytics()
-
-    '''
-    for person in people:
-        print person
-        print people[person].weeks
-        print '\n'
-        if count > 5:
-            break
-        count += 1
-    '''
-    
-    makeGoals()
-    #personToTest = people[u'9c8e0baf-2221-4889-a710-f77496f93c8e']
+    #doAnalytics()
     #scoreRun(personToTest, goals_list[0], personToTest.getMostRecentRun())
     #graphList()
 
@@ -242,19 +230,30 @@ def main():
     while True:
         doData()
         print '\n\n'
-        print 'Enter ID of person to score: '
+        print 'Enter user ID: '
         personID = raw_input('>')
         personID = personID.strip().lstrip().lower()
-        print '(S)core run\n(V)iew statistics'
+        try:
+            person = people[personID]
+        except:
+            continue
+
+        print '(S)core run\n(V)iew statistics\nView (O)verall statistics'
         inp = raw_input('>')
         inp = inp.strip().lstrip().lower()
         if inp == 's':
             #score run
-            person = people[personID]
             scoreRun(person, goals_list[randint(0,2)], person.getMostRecentRun())
         elif inp == 'v':
             #view stats
-            
+            print 'Number of total runs: ',
+            print str(person.getTotalNumberOfRuns())
+            print 'Most recent run: ',
+            print person.getMostRecentRun().toString()
+            print 'This week\'s goal: ',
+            print person.goal.toString()
+        elif inp == 'o':
+            doAnalytics()
 
 if __name__ == "__main__":
     main()

@@ -29,6 +29,16 @@ class Goal:
         #TODO: actually do something here
         return self.completedValue
 
+    def toString(self):
+        outStr = '{'
+        for p in self.params:
+            if self.params[p] != None:
+                outStr += str(p) + ': ' + str(self.params[p]) + ', '
+        outStr += 'Completed Value: '
+        outStr += str(self.completedValue)
+        outStr += '}'
+        return outStr
+
 
 
 '''
