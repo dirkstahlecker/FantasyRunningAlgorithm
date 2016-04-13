@@ -210,11 +210,6 @@ def makeGoals():
 
 ################ execution ###############################################
 
-#input 
-def scoreRunViaInput(input):
-    pass
-
-
 def doData():
     #populate the lists from the API data
     # get some new data by uncommenting this
@@ -247,20 +242,19 @@ def main():
     while True:
         doData()
         print '\n\n'
+        print 'Enter ID of person to score: '
+        personID = raw_input('>')
+        personID = personID.strip().lstrip().lower()
         print '(S)core run\n(V)iew statistics'
         inp = raw_input('>')
         inp = inp.strip().lstrip().lower()
         if inp == 's':
             #score run
-            print 'Enter ID of person to score: '
-            personID = raw_input('>')
-            personID = personID.strip().lstrip().lower()
-
             person = people[personID]
             scoreRun(person, goals_list[randint(0,2)], person.getMostRecentRun())
         elif inp == 'v':
             #view stats
-            pass
+            
 
 if __name__ == "__main__":
     main()
