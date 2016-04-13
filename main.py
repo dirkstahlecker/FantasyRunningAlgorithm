@@ -12,15 +12,8 @@ from Run import *
 from random import randint
 
 ################ constants ###############################################
-TIER1_DURATION = 60
-TIER2_DURATION = 40
-TIER3_DURATION = 20
 
-TIER1_SPEED = 8
-TIER2_SPEED = 4
-TIER3_SPEED = 2
-
-NUM_PAGES = 50
+NUM_PAGES = 10
 
 ################ Get data ###############################################
 def makeRequest(page):
@@ -74,7 +67,7 @@ def addToLists(decoded_json): #this method gets called multiple times (once per 
             people[ID].addRun(thisRun)
 
 
-
+################ File Interaction ###############################################
 def saveDataToFile(file_name, num_pages):
     if num_pages == 0:
         print 'num_pages must be greater than 0'
@@ -225,10 +218,19 @@ def doData():
     #scoreRun(personToTest, goals_list[0], personToTest.getMostRecentRun())
     #graphList()
 
+def doDataFromFile():
+    makeGoals()
+
+    addToLists(getDataFromFile('data_store_10_pages'))
+
 #main control loop
 def main():
+    #saveDataToFile('data_store_10_pages', 10)
+
+
     while True:
-        doData()
+        doDataFromFile()
+        #doData()
         print '\n\n'
         print 'Enter user ID: '
         personID = raw_input('>')
