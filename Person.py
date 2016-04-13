@@ -31,22 +31,7 @@ class PersonClass:
 
 
         return int(hashStr)
-    '''
-    def getWeekOfRun(self, run):
-        date = run.date
-        weekHash = getWeekHashForDate(date)
 
-        try:
-            weeks[weekHash].append(run)
-        except:
-
-        if weekNum == currentWeek: #in current week, don't need to do anything special
-            weeks[weekNum].append(run)
-        else: #new or old week, so have to first find what week it is
-            weekNum = datetime.date(year, month, day).weekday()
-
-        return 
-    '''
     #run: Run object
     def addRun(self, run):
         week = self.getWeekHashForDate(run.date)
@@ -56,14 +41,6 @@ class PersonClass:
             self.weeks[week].append(run)
         except:
             self.weeks[week] = [run]
-
-    '''
-    #unnecessary because of week hash
-    def newWeek(self, date):
-        self.currentWeek = self.currentWeek + 1
-        currentWeekDate = date
-        self.weeks[self.currentWeek] = []
-    '''
 
     def getRunsAtWeek(self, week):
         return self.weeks[week]
@@ -80,17 +57,12 @@ class PersonClass:
         mean_speed_list = []
         distance_list = []
 
-        print 'currentRuns: ',
-        print currentRuns
-
         for run in currentRuns:
             if type(run) == int:
                 continue #TODO: hacked fix
             duration_list.append(run.duration)
             mean_speed_list.append(run.mean_speed)
             distance_list.append(run.distance)
-        print 'durationlist: ',
-        print duration_list
 
         duration_avg = float(sum(duration_list)) / len(duration_list)
         mean_speed_avg = float(sum(mean_speed_list)) / len(mean_speed_list)

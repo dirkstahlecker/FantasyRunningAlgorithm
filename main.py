@@ -150,16 +150,14 @@ def scoreRun(person, goal, run):
     score = 0
     score += goal.check()
 
-    currentRun = person.getMostRecentRun()
-    #ASSUMPTION: only look at most recent run, in place of most recent week. Week infrastructure is long and complicated
     (duration_avg, mean_speed_avg, distance_avg) = person.getCurrentWeekAverages() 
-    
     (duration_total, mean_speed_total, distance_total) = person.getTotalAverages()
     
     duration_diff = duration_avg - duration_total
     mean_speed_diff = mean_speed_avg - mean_speed_total
     distance_diff = distance_avg - distance_total
     
+    #currentRun = person.getMostRecentRun()
     #duration_diff = currentRun.duration - duration_total
     #mean_speed_diff = currentRun.mean_speed - mean_speed_total
     #distance_diff = currentRun.distance - distance_total
@@ -172,7 +170,6 @@ def scoreRun(person, goal, run):
     print score
 
     return score
-
 
 
 def graphList():
@@ -229,7 +226,6 @@ def doData():
     count = 0
     doAnalytics()
 
-
     '''
     for person in people:
         print person
@@ -239,27 +235,14 @@ def doData():
             break
         count += 1
     '''
-    '''
-    req = urllib2.Request('https://pumatrac-geo-api.herokuapp.com/activities?bounds=box:0,0:90,180&page=0')
-    req.add_header('Authorization', 'Bearer 1cfb51cd69904221818dafc4069f9d61')
-    resp = urllib2.urlopen(req)
-    content = resp.read()
-    #userID = content['activities'][0]['id']
-    '''
     
     makeGoals()
     personToTest = people[u'9c8e0baf-2221-4889-a710-f77496f93c8e']
-    #TODO: reenable 
     scoreRun(personToTest, goals_list[0], personToTest.getMostRecentRun())
-    #makeGoals()
-    
-
-
     #graphList()
 
 #main control loop
 def main():
-    '''
     while True:
         print '(S)core run\n(V)iew statistics'
         inp = raw_input('>')
@@ -271,8 +254,6 @@ def main():
             #view stats
             doData()
         print '\n\n'
-    '''
-    doData()
 
 if __name__ == "__main__":
     main()
