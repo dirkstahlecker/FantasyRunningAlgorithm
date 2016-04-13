@@ -105,9 +105,7 @@ class PersonClass:
 
     def getMostRecentRun(self):
         week = self.weeks[self.currentWeek] #TODO: make this the most recent week
-        print 'week: ',
-        print week
-        return week
+        return week[len(week) - 1]
 
     #needed to be a value in a dictionary
     def __hash__(self):

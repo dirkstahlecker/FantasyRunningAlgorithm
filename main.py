@@ -151,7 +151,7 @@ def scoreRun(person, goal, run):
     #score += checkGoal()
 
     #currentRuns = person.getCurrentWeekRuns()
-    currentRun = person.getMostRecentRun()[0]
+    currentRun = person.getMostRecentRun()
     #ASSUMPTION: only look at most recent run, in place of most recent week. Week infrastructure is long and complicated
     #(duration_avg, mean_speed_avg, distance_avg) = person.getCurrentWeekAverages() 
     
@@ -248,9 +248,9 @@ def doData():
     #userID = content['activities'][0]['id']
     '''
     
-
+    personToTest = people[u'9c8e0baf-2221-4889-a710-f77496f93c8e']
     #TODO: reenable 
-    scoreRun(people[u'9c8e0baf-2221-4889-a710-f77496f93c8e'], None, duration_list, mean_speed_list, distance_list)
+    scoreRun(personToTest, None, personToTest.getMostRecentRun())
     #makeGoals()
     
 
