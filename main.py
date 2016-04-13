@@ -256,7 +256,23 @@ def main():
         elif inp == 'o':
             doAnalytics()
         elif inp == 'g':
-            graphList(mean_speed_list)
+            l_avg = []
+            l_dist = []
+            l_dur = []
+            for run in person.getCurrentWeekRuns():
+                l_avg.append(run.mean_speed)
+                l_dist.append(run.distance)
+                l_dur.append(run.duration)
+
+            print '(A)verage speed\nD(i)stance\nD(u)ration'
+            i = raw_input('>')
+            i = i.strip().lstrip().lower()
+            if i == 'a':
+                graphList(l_avg)
+            elif i == 'i':
+                graphList(l_dist)
+            elif i == 'u':
+                graphList(l_dur)
 
 if __name__ == "__main__":
     main()
