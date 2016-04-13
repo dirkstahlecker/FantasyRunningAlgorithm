@@ -9,6 +9,7 @@ from Person import *
 import yaml
 from Goal import *
 from Run import *
+from random import randint
 
 ################ constants ###############################################
 TIER1_DURATION = 60
@@ -237,29 +238,31 @@ def doData():
     '''
     
     makeGoals()
-    personToTest = people[u'9c8e0baf-2221-4889-a710-f77496f93c8e']
-    scoreRun(personToTest, goals_list[0], personToTest.getMostRecentRun())
+    #personToTest = people[u'9c8e0baf-2221-4889-a710-f77496f93c8e']
+    #scoreRun(personToTest, goals_list[0], personToTest.getMostRecentRun())
     #graphList()
 
 #main control loop
 def main():
     while True:
+        doData()
+        print '\n\n'
         print '(S)core run\n(V)iew statistics'
         inp = raw_input('>')
         inp = inp.strip().lstrip().lower()
         if inp == 's':
             #score run
-            pass
+            print 'Enter ID of person to score: '
+            personID = raw_input('>')
+            personID = personID.strip().lstrip().lower()
+
+            person = people[personID]
+            scoreRun(person, goals_list[randint(0,2)], person.getMostRecentRun())
         elif inp == 'v':
             #view stats
-            doData()
-        print '\n\n'
+            pass
 
 if __name__ == "__main__":
     main()
-
-
-
-
 
 
