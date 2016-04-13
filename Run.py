@@ -22,17 +22,11 @@ def pullStatsFromRun(activity):
 
     #enforce minimums
     if duration < MIN_DURATION or distance < MIN_DISTANCE:
-        print 'invalid duration: ',
-        print duration
         return None
     #weed out unreasonable maximums
     if duration > MAX_DURATION or distance > MAX_DURATION:
-        print 'invalid duration: ',
-        print duration
         return None
     if date.year > 2020 or date.year < 1970:
-        print 'invalid date: ',
-        print date
         return None
     return Run(duration, mean_speed, distance, date)
 

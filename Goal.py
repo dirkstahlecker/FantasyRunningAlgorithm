@@ -21,17 +21,13 @@ class Goal:
         'runMinSpeedBool' : None
         }
 
-    def __init__(self, tier):
-        self.completedValue = 30 #fix
+    def __init__(self, tier, completedValue):
+        self.completedValue = completedValue
         self.tier = tier
 
-    def getCompletedValue(self):
+    def check(self):
+        #TODO: actually do something here
         return self.completedValue
-
-    def checkCompletion(self):
-        
-        return True
-
 
 
 

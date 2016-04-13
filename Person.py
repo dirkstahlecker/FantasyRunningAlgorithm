@@ -80,11 +80,17 @@ class PersonClass:
         mean_speed_list = []
         distance_list = []
 
+        print 'currentRuns: ',
+        print currentRuns
+
         for run in currentRuns:
-            #thisRun = pullStatsFromRun(run)
+            if type(run) == int:
+                continue #TODO: hacked fix
             duration_list.append(run.duration)
             mean_speed_list.append(run.mean_speed)
             distance_list.append(run.distance)
+        print 'durationlist: ',
+        print duration_list
 
         duration_avg = float(sum(duration_list)) / len(duration_list)
         mean_speed_avg = float(sum(mean_speed_list)) / len(mean_speed_list)
@@ -93,19 +99,23 @@ class PersonClass:
         return (duration_avg, mean_speed_avg, distance_avg)
 
     def getCurrentWeekAverages(self):
-        return self.averagesHelper(self.weeks[self.currentWeek])
+        runs = self.weeks[self.currentWeek]
+        return self.averagesHelper(runs)
 
     def getTotalAverages(self):
-        '''
         runs = []
         for week in self.weeks:
-            runs.append(week)
-        '''
-        return self.averagesHelper(self.weeks[self.currentWeek]) #runs
+            for run in self.weeks[week]:
+                runs.append(run)
+        
+        return self.averagesHelper(runs)
 
     def getMostRecentRun(self):
-        week = self.weeks[self.currentWeek] #TODO: make this the most recent week
+        week = self.weeks[self.currentWeek]
         return week[len(week) - 1]
+
+    def getMostRecentWeekRuns(self):
+        return self.weeks[self.currentWeek]
 
     #needed to be a value in a dictionary
     def __hash__(self):

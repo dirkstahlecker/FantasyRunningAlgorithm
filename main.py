@@ -148,27 +148,26 @@ DISTANCE_PROP_CONST = 1
 
 def scoreRun(person, goal, run):
     score = 0
-    #score += checkGoal()
+    score += goal.check()
 
-    #currentRuns = person.getCurrentWeekRuns()
     currentRun = person.getMostRecentRun()
     #ASSUMPTION: only look at most recent run, in place of most recent week. Week infrastructure is long and complicated
-    #(duration_avg, mean_speed_avg, distance_avg) = person.getCurrentWeekAverages() 
+    (duration_avg, mean_speed_avg, distance_avg) = person.getCurrentWeekAverages() 
     
     (duration_total, mean_speed_total, distance_total) = person.getTotalAverages()
-    '''
+    
     duration_diff = duration_avg - duration_total
     mean_speed_diff = mean_speed_avg - mean_speed_total
     distance_diff = distance_avg - distance_total
-    '''
-    duration_diff = currentRun.duration - duration_total
-    mean_speed_diff = currentRun.mean_speed - mean_speed_total
-    distance_diff = currentRun.distance - distance_total
-
+    
+    #duration_diff = currentRun.duration - duration_total
+    #mean_speed_diff = currentRun.mean_speed - mean_speed_total
+    #distance_diff = currentRun.distance - distance_total
+    
     score += duration_diff * MEAN_SPEED_DIFF_PROP_CONST
     score += mean_speed_diff * MEAN_SPEED_DIFF_PROP_CONST
     score += distance_diff * DISTANCE_PROP_CONST
-
+    
     print 'Score: ',
     print score
 
@@ -195,17 +194,17 @@ def graphList():
 goals_list = []
 #used to populate a few goals for the heirarchy
 def makeGoals():
-    goal = Goal(1)
+    goal = Goal(1, 15)
     goal.params['numRuns'] = 3
     goal.params['totalDuration'] = 60
     goals_list.append(goal)
 
-    goal = Goal(2)
+    goal = Goal(2, 20)
     goal.params['runAvgSpeed'] = 10
     goal.params['totalDistance'] = 30
     goals_list.append(goal)
 
-    goal = Goal(3)
+    goal = Goal(3, 30)
     goal.params['totalDistance'] = 60
     goal.params['runMinSpeed'] = 8
     goals_list.append(goal)
@@ -248,9 +247,10 @@ def doData():
     #userID = content['activities'][0]['id']
     '''
     
+    makeGoals()
     personToTest = people[u'9c8e0baf-2221-4889-a710-f77496f93c8e']
     #TODO: reenable 
-    scoreRun(personToTest, None, personToTest.getMostRecentRun())
+    scoreRun(personToTest, goals_list[0], personToTest.getMostRecentRun())
     #makeGoals()
     
 
