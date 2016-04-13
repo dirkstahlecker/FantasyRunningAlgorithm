@@ -7,6 +7,7 @@ class PersonClass:
     weeks = {} # { weekHash : [ run ] } #TODO: update this to reflect multiple weeks
     #currentWeek = 0 #should be unnecessary with the new weekHash implementation
     goal = None
+    currentWeek = 0 #holds the current (or highest number) week
 
     def __init__(self, id_in, goal):
         self.ID = id_in
@@ -28,6 +29,7 @@ class PersonClass:
             d = '0' + d
         hashStr += d
 
+
         return int(hashStr)
     '''
     def getWeekOfRun(self, run):
@@ -48,6 +50,8 @@ class PersonClass:
     #run: Run object
     def addRun(self, run):
         week = self.getWeekHashForDate(run.date)
+        if week > self.currentWeek:
+            self. currentWeek = week
         try:
             self.weeks[week].append(run)
         except:
@@ -75,9 +79,6 @@ class PersonClass:
         duration_list = []
         mean_speed_list = []
         distance_list = []
-
-        print 'currentRuns: ',
-        print currentRuns
 
         for run in currentRuns:
             #thisRun = pullStatsFromRun(run)

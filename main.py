@@ -19,7 +19,7 @@ TIER1_SPEED = 8
 TIER2_SPEED = 4
 TIER3_SPEED = 2
 
-NUM_PAGES = 3
+NUM_PAGES = 5
 
 ################ Get data ###############################################
 def makeRequest(page):
@@ -146,7 +146,7 @@ MEAN_SPEED_DIFF_PROP_CONST = 2
 DURATION_PROP_CONST = 1
 DISTANCE_PROP_CONST = 1
 
-def scoreRun(person, goal, duration_list_in, mean_speed_list_in, distance_list_in):
+def scoreRun(person, goal, run):
     score = 0
     #score += checkGoal()
 
@@ -231,7 +231,7 @@ def doData():
     doAnalytics()
 
 
-    
+    '''
     for person in people:
         print person
         print people[person].weeks
@@ -239,7 +239,7 @@ def doData():
         if count > 5:
             break
         count += 1
-    
+    '''
     '''
     req = urllib2.Request('https://pumatrac-geo-api.herokuapp.com/activities?bounds=box:0,0:90,180&page=0')
     req.add_header('Authorization', 'Bearer 1cfb51cd69904221818dafc4069f9d61')
@@ -250,7 +250,7 @@ def doData():
     
 
     #TODO: reenable 
-    #scoreRun(people[u'9c8e0baf-2221-4889-a710-f77496f93c8e'], None, duration_list, mean_speed_list, distance_list)
+    scoreRun(people[u'9c8e0baf-2221-4889-a710-f77496f93c8e'], None, duration_list, mean_speed_list, distance_list)
     #makeGoals()
     
 
