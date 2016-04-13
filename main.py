@@ -166,8 +166,7 @@ def scoreRun(person, goal, run):
     return score
 
 
-def graphList():
-    data = mean_speed_list
+def graphList(data):
     mu, std = norm.fit(data)
     plt.hist(data, bins=25, normed=True, alpha=0.6, color='g')
 
@@ -229,8 +228,8 @@ def main():
 
 
     while True:
-        doDataFromFile()
-        #doData()
+        #doDataFromFile()
+        doData()
         print '\n\n'
         print 'Enter user ID: '
         personID = raw_input('>')
@@ -240,7 +239,7 @@ def main():
         except:
             continue
 
-        print '(S)core run\n(V)iew statistics\nView (O)verall statistics'
+        print '(S)core run\n(V)iew statistics\nView (O)verall statistics\n(G)raph'
         inp = raw_input('>')
         inp = inp.strip().lstrip().lower()
         if inp == 's':
@@ -256,6 +255,8 @@ def main():
             print person.goal.toString()
         elif inp == 'o':
             doAnalytics()
+        elif inp == 'g':
+            graphList(mean_speed_list)
 
 if __name__ == "__main__":
     main()
