@@ -3,7 +3,9 @@ import datetime
 MIN_DURATION = 10 #minutes
 MIN_DISTANCE = 0.25 #miles
 MAX_DISTANCE = 200 #miles
-MAX_DURATION = 20*60 #minutes
+MAX_DURATION = 20*60 #20 hours in minutes
+MAX_YEAR = 2020
+MIN_YEAR = 1970
 
 def pullStatsFromRun(activity):
     duration = activity['duration']
@@ -26,7 +28,7 @@ def pullStatsFromRun(activity):
     #weed out unreasonable maximums
     if duration > MAX_DURATION or distance > MAX_DURATION:
         return None
-    if date.year > 2020 or date.year < 1970:
+    if date.year > MIN_YEAR or date.year < MIN_YEAR:
         return None
     return Run(duration, mean_speed, distance, date)
 
@@ -51,6 +53,5 @@ class Run:
         outStr += 'date: ' + str(self.date)
         outStr += '}'
         return outStr
-
 
 

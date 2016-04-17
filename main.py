@@ -36,7 +36,8 @@ people = {} # { ID : person }
 id_list = []
 def addToLists(decoded_json): #this method gets called multiple times (once per page)
     for activity in decoded_json['activities']:
-        if activity['mode'] != 'outdoor' and activity['mode'] != 'treadmill': #ignore exercise that isn't running
+        mode = activity['mode']
+        if mode != 'outdoor' and mode != 'treadmill': #ignore exercise that isn't running (indoor and outdoor are equivalent)
             continue
 
         try:
@@ -138,7 +139,7 @@ def checkGoal(goal, person):
 #constants for scoring
 MEAN_SPEED_DIFF_PROP_CONST = 2
 DURATION_PROP_CONST = 1
-DISTANCE_PROP_CONST = 1
+DISTANCE_PROP_CONST = 1.25
 
 def scoreRun(person, goal, run):
     score = 0
@@ -174,6 +175,7 @@ def graphList(data):
     x = np.linspace(xmin, xmax, 100)
     p = norm.pdf(x, mu, std)
     plt.plot(x, p, 'k', linewidth=2)
+    #plt.plot(x,'k',linewidth=2)
     title = "Fit results: mu = %.2f,  std = %.2f" % (mu, std)
     plt.title(title)
 
@@ -207,15 +209,10 @@ def doData():
     # get some new data by uncommenting this
     # saveDataToFile('data.txt', NUM_PAGES)
     #data = getDataFromFile('data.txt')
-    #addToLists(data)
     makeGoals()
 
     for x in range(0,NUM_PAGES):
         addToLists(makeRequest(x))
-
-    #doAnalytics()
-    #scoreRun(personToTest, goals_list[0], personToTest.getMostRecentRun())
-    #graphList()
 
 def doDataFromFile():
     makeGoals()
@@ -276,5 +273,19 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+
+'''
+To do:
+-get everyone in class on puma trac, populate weeks of data for them, then have each run 
+and split into teams to simulate an actual competition
+    -have a star athlete as a part of each team as well (taken from pumatrac existing data)
+-possibly create graphs and send them to front end
+-figure out how to get data to front end
+-fix issue with runs not going to the proper people solely
+-put data into database
+'''
 
 

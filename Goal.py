@@ -27,6 +27,7 @@ class Goal:
 
     def check(self):
         #TODO: actually do something here
+
         return self.completedValue
 
     def toString(self):
