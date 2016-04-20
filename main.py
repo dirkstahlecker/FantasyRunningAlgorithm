@@ -214,6 +214,57 @@ def doData():
     for x in range(0,NUM_PAGES):
         addToLists(makeRequest(x))
 
+
+#helper to get a random run and return a json string to be sent into the API
+def makeJsonOfRandomRun():
+    keys = people.keys()
+    i = keys[randint(0,len(keys)-1)]
+    person = people[i]
+
+    run = person.getMostRecentRun()
+    
+    return json.dumps({
+        'duration': run.duration, 
+        'distance': run.distance,
+        'mean_speed': run.mean_speed,
+        'date': str(run.date)
+        })
+    
+
+# send data for the front end to utilize
+# current in proof of concept mode
+def sendDataToFrontEnd(strToSend):
+    #url = 'http://cms634fantasyrunningapp-fantasyrunning.rhcloud.com/addRun'
+    url = 'http://localhost:6340/addRun'
+
+    data = makeJsonOfRandomRun()
+    
+    print data
+    req = urllib2.Request(url, data, {'Content-Type': 'application/json'})
+    f = urllib2.urlopen(req)
+    response = f.read()
+    print 'response: ',
+    print response
+    f.close()
+    
+
+
+    '''
+    req = urllib2.Request('http://cms634fantasyrunningapp-fantasyrunning.rhcloud.com/addData')
+    req.add_header('Content-Type', 'application/json')
+
+    toAdd = {'fieldOne' : strToSend}
+
+    response = urllib2.urlopen(req, toAdd)
+    
+    req = urllib2.Request('localhost:8080/addData')
+    req.add_data('fieldOne', 'Message sent from Python!')
+    resp = urllib2.urlopen(req)
+    content = resp.read()
+    '''
+
+
+
 def doDataFromFile():
     makeGoals()
 
@@ -223,6 +274,8 @@ def doDataFromFile():
 def main():
     #saveDataToFile('data_store_10_pages', 10)
 
+    doData()
+    sendDataToFrontEnd('testingStringToSend')
 
     while True:
         #doDataFromFile()

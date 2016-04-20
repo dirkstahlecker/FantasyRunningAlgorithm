@@ -28,8 +28,9 @@ def pullStatsFromRun(activity):
     #weed out unreasonable maximums
     if duration > MAX_DURATION or distance > MAX_DURATION:
         return None
-    if date.year > MIN_YEAR or date.year < MIN_YEAR:
+    if date.year < MIN_YEAR or date.year > MAX_YEAR:
         return None
+
     return Run(duration, mean_speed, distance, date)
 
 
