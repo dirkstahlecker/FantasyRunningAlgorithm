@@ -218,7 +218,8 @@ def doData():
 #helper to get a random run and return a json string to be sent into the API
 def makeJsonOfRandomRun():
     keys = people.keys()
-    i = keys[randint(0,len(keys)-1)]
+    maxLen = len(keys)-1
+    i = keys[randint(0,maxLen)]
     person = people[i]
 
     run = person.getMostRecentRun()
@@ -234,37 +235,20 @@ def makeJsonOfRandomRun():
 # send data for the front end to utilize
 # current in proof of concept mode
 def sendDataToFrontEnd(strToSend):
-    #url = 'http://cms634fantasyrunningapp-fantasyrunning.rhcloud.com/addRun'
-    url = 'http://localhost:6340/addRun'
+    url = 'http://cms634fantasyrunningapp-fantasyrunning.rhcloud.com/addRun'
+    #url = 'http://localhost:6340/addRun'
 
     data = makeJsonOfRandomRun()
     
-    print data
     req = urllib2.Request(url, data, {'Content-Type': 'application/json'})
     f = urllib2.urlopen(req)
     response = f.read()
-    print 'response: ',
+    print 'Successfully sent data. Response: ',
     print response
     f.close()
-    
 
 
-    '''
-    req = urllib2.Request('http://cms634fantasyrunningapp-fantasyrunning.rhcloud.com/addData')
-    req.add_header('Content-Type', 'application/json')
-
-    toAdd = {'fieldOne' : strToSend}
-
-    response = urllib2.urlopen(req, toAdd)
-    
-    req = urllib2.Request('localhost:8080/addData')
-    req.add_data('fieldOne', 'Message sent from Python!')
-    resp = urllib2.urlopen(req)
-    content = resp.read()
-    '''
-
-
-
+#clone of doData but using data from a stored file
 def doDataFromFile():
     makeGoals()
 
@@ -342,3 +326,11 @@ and split into teams to simulate an actual competition
 '''
 
 
+
+'''
+4-20-16:
+sequence diagram of how process happens
+no monetary rewards - use raffle points?
+can goals be chosen by the team instead of the user?
+    problem is asymmetric teammates - adding another group would be confusing, and add complexity
+'''
