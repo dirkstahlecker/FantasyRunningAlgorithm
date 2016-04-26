@@ -236,7 +236,7 @@ def makeJsonOfRandomRun():
 # current in proof of concept mode
 def sendDataToFrontEnd(strToSend):
     #url = 'http://cms634fantasyrunningapp-fantasyrunning.rhcloud.com/addRun'
-    url = 'http://localhost:6340/addBackendDataToDatabase'
+    url = 'http://localhost:6340/data/addBackendDataToDatabase'
 
     #data = makeJsonOfRandomRun()
     data = json.loads(people['a5da3bd1-35e3-4926-9857-d575fd3a40d3'].toJsonString())
