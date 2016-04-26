@@ -29,7 +29,6 @@ class PersonClass:
             d = '0' + d
         hashStr += d
 
-
         return int(hashStr)
 
     #run: Run object
@@ -95,6 +94,24 @@ class PersonClass:
             for run in self.weeks[week]:
                 count += 1
         return count
+    
+    def toJsonString(self):
+        outStr = '{'
+        outStr += '"id": "' + self.ID + '", '
+        outStr += '"goal": ' + self.goal.toJsonString() + ', '
+        outStr += '"currentWeek": "' + str(self.currentWeek) + '", '
+        outStr += '"weeks": ['
+        for week in self.weeks:
+            outStr += '{"hash": "' + str(week) + '", '
+            outStr += '"runs": ['
+            for run in self.weeks[week]:
+                outStr += run.toJsonString() + ', '
+            outStr = outStr[:len(outStr) - 2]
+            outStr += ']}, '
+        outStr = outStr[:len(outStr) - 2] 
+        outStr += ']}'
+        return outStr
+    
 
     #needed to be a value in a dictionary
     def __hash__(self):

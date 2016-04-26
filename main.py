@@ -254,11 +254,25 @@ def doDataFromFile():
 
     addToLists(getDataFromFile('data_store_10_pages'))
 
+
+class MyEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if not (isinstance(obj, Run) or isinstance(obj, PersonClass) or isinstance(obj, Goal)):
+            return super(MyEncoder, self).default(obj)
+
+        return obj.__dict__
+
+
+
 #main control loop
 def main():
     #saveDataToFile('data_store_10_pages', 10)
 
     doData()
+    print people['a5da3bd1-35e3-4926-9857-d575fd3a40d3'].toJsonString()
+    #print json.dumps(people, cls=MyEncoder)
+    return
+
     sendDataToFrontEnd('testingStringToSend')
 
     while True:

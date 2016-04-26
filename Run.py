@@ -48,11 +48,14 @@ class Run:
 
     def toString(self):
         outStr = '{'
-        outStr += 'duration: ' + str(self.duration) + ', '
-        outStr += 'mean_speed: ' + str(self.mean_speed) + ', '
-        outStr += 'distance: ' + str(self.distance) + ', '
-        outStr += 'date: ' + str(self.date)
-        outStr += '}'
+        outStr += '"duration": "' + str(self.duration) + '", '
+        outStr += '"mean_speed": "' + str(self.mean_speed) + '", '
+        outStr += '"distance": "' + str(self.distance) + '", '
+        outStr += '"date": "' + str(self.date)
+        outStr += '"}'
         return outStr
-
+    
+    def toJsonString(self):
+        return self.toString()
+    
 

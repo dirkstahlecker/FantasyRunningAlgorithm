@@ -31,14 +31,18 @@ class Goal:
         return self.completedValue
 
     def toString(self):
-        outStr = '{'
+        outStr = '{"params": {'
         for p in self.params:
             if self.params[p] != None:
-                outStr += str(p) + ': ' + str(self.params[p]) + ', '
-        outStr += 'Completed Value: '
+                outStr += '"' + str(p) + '": "' + str(self.params[p]) + '", '
+        outStr = outStr[:len(outStr) - 2]
+        outStr += '}, "completedValue": "'
         outStr += str(self.completedValue)
-        outStr += '}'
+        outStr += '"}'
         return outStr
+
+    def toJsonString(self):
+        return self.toString()
 
 
 
