@@ -33,13 +33,13 @@ tier1_count = tier2_count = tier3_count = 0
 
 
 people = {} # { ID : person }
-id_list = []
 def addToLists(decoded_json): #this method gets called multiple times (once per page)
     for activity in decoded_json['activities']:
         mode = activity['mode']
         if mode != 'outdoor' and mode != 'treadmill': #ignore exercise that isn't running (indoor and outdoor are equivalent)
             continue
 
+        thisRun = None
         try:
             thisRun = pullStatsFromRun(activity)
         except:
@@ -54,18 +54,32 @@ def addToLists(decoded_json): #this method gets called multiple times (once per 
         distance_list.append(thisRun.distance)
 
         ID = activity['id']
+        print 'ID: ',
+        print ID
         
         #new ID
         if ID not in people:
+            print 'new ID'
+            person = None
             #create person and add to dictionary
             person = PersonClass(ID, goals_list[0])
+            print 'newly created person: ',
+            print person
+
+            if len(person.weeks) != 0:
+                print 'THERE ARE WEEKS WHERE THERE SHOULDN\'T BE'
+                person.weeks = {}
+
             person.addRun(thisRun)
+            #print 'weeks after adding run: ',
+            #print person.weeks
             people[ID] = person
-            id_list.append(ID)
         #seen this ID before
         else:
             #append new info to the dictionary
+            print 'seen this ID before'
             people[ID].addRun(thisRun)
+
 
 
 ################ File Interaction ###############################################
@@ -235,7 +249,7 @@ def makeJsonOfRandomRun():
 # send data for the front end to utilize
 # current in proof of concept mode
 def sendDataToFrontEnd(strToSend):
-    #url = 'http://cms634fantasyrunningapp-fantasyrunning.rhcloud.com/addRun'
+    #url = 'http://cms634fantasyrunningapp-fantasyrunning.rhcloud.com/data/addBackendDataToDatabase'
     url = 'http://localhost:6340/data/addBackendDataToDatabase'
 
     #data = makeJsonOfRandomRun()
@@ -256,14 +270,25 @@ def doDataFromFile():
 
     addToLists(getDataFromFile('data_store_10_pages'))
 
-
+'''
 class MyEncoder(json.JSONEncoder):
     def default(self, obj):
         if not (isinstance(obj, Run) or isinstance(obj, PersonClass) or isinstance(obj, Goal)):
             return super(MyEncoder, self).default(obj)
 
         return obj.__dict__
+'''
 
+def makePostQuery(url, data):
+    req = urllib2.Request(url, data, {'Content-Type': 'application/json'})
+    f = urllib2.urlopen(req)
+    response = f.read()
+    f.close()
+    return response
+
+def makeGetQuery(url):
+    response = urllib2.urlopen(url).read()
+    return response
 
 
 #main control loop
@@ -273,7 +298,17 @@ def main():
     doData()
     #print json.dumps(people, cls=MyEncoder)
 
-    sendDataToFrontEnd('testingStringToSend')
+    #sendDataToFrontEnd('testingStringToSend')
+
+    #response = makeGetQuery('http://cms634fantasyrunningapp-fantasyrunning.rhcloud.com/data/runs/a5da3bd1-35e3-4926-9857-d575fd3a40d3')
+    #response = makeGetQuery('http://localhost:6340/data/runs/a5da3bd1-35e3-4926-9857-d575fd3a40d3')
+    #print 'response: ',
+    #print response
+
+    print people
+
+
+    return
 
     while True:
         #doDataFromFile()
