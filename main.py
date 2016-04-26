@@ -235,11 +235,13 @@ def makeJsonOfRandomRun():
 # send data for the front end to utilize
 # current in proof of concept mode
 def sendDataToFrontEnd(strToSend):
-    url = 'http://cms634fantasyrunningapp-fantasyrunning.rhcloud.com/addRun'
-    #url = 'http://localhost:6340/addRun'
+    #url = 'http://cms634fantasyrunningapp-fantasyrunning.rhcloud.com/addRun'
+    url = 'http://localhost:6340/addBackendDataToDatabase'
 
-    data = makeJsonOfRandomRun()
-    
+    #data = makeJsonOfRandomRun()
+    data = json.loads(people['a5da3bd1-35e3-4926-9857-d575fd3a40d3'].toJsonString())
+    data = json.dumps({'person': data})
+
     req = urllib2.Request(url, data, {'Content-Type': 'application/json'})
     f = urllib2.urlopen(req)
     response = f.read()
@@ -269,9 +271,7 @@ def main():
     #saveDataToFile('data_store_10_pages', 10)
 
     doData()
-    print people['a5da3bd1-35e3-4926-9857-d575fd3a40d3'].toJsonString()
     #print json.dumps(people, cls=MyEncoder)
-    return
 
     sendDataToFrontEnd('testingStringToSend')
 
