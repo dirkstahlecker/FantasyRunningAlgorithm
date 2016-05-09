@@ -13,16 +13,18 @@ from random import randint
 
 ################ constants ###############################################
 
-NUM_PAGES = 10
+NUM_PAGES = 1
 
 ################ Get data ###############################################
 def makeRequest(page):
     #TODO: error handling on pagination
-    req = urllib2.Request('https://pumatrac-geo-api.herokuapp.com/activities?bounds=box:0,0:90,180&page=' + str(page))
+    req = urllib2.Request('https://pumatrac-geo-api.herokuapp.com/activities?bounds=box:74.38,72.20:41.01,40.29&mode=outdoor&page=' + str(page))
+    #req = urllib2.Request('https://pumatrac-geo-api.herokuapp.com/activities?user_id=2143d242-afff-42eb-9f6d-7981b8ea170c')
     req.add_header('Authorization', 'Bearer 1cfb51cd69904221818dafc4069f9d61')
     resp = urllib2.urlopen(req)
     content = resp.read()
-    decoded_json = json.JSONDecoder().decode(content)
+    #decoded_json = json.JSONDecoder().decode(content)
+    decoded_json = json.loads(content)
     return decoded_json
 
 #initialize list holders
@@ -33,7 +35,9 @@ tier1_count = tier2_count = tier3_count = 0
 
 
 people = {} # { ID : person }
-def addToLists(decoded_json): #this method gets called multiple times (once per page)
+def addToLists(decoded_json, count): #this method gets called multiple times (once per page)
+    print count #print page number for reference while running long batches
+    count += 1
     for activity in decoded_json['activities']:
         mode = activity['mode']
         if mode != 'outdoor' and mode != 'treadmill': #ignore exercise that isn't running (indoor and outdoor are equivalent)
@@ -54,20 +58,14 @@ def addToLists(decoded_json): #this method gets called multiple times (once per 
         distance_list.append(thisRun.distance)
 
         ID = activity['id']
-        print 'ID: ',
-        print ID
         
         #new ID
         if ID not in people:
-            print 'new ID'
             person = None
             #create person and add to dictionary
             person = PersonClass(ID, goals_list[0])
-            print 'newly created person: ',
-            print person
 
             if len(person.weeks) != 0:
-                print 'THERE ARE WEEKS WHERE THERE SHOULDN\'T BE'
                 person.weeks = {}
 
             person.addRun(thisRun)
@@ -77,8 +75,8 @@ def addToLists(decoded_json): #this method gets called multiple times (once per 
         #seen this ID before
         else:
             #append new info to the dictionary
-            print 'seen this ID before'
             people[ID].addRun(thisRun)
+            print 'PREVIOUSLY SEEN ID ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 
 
 
@@ -150,36 +148,6 @@ def checkGoal(goal, person):
     #TODO: fill this in
 
 
-#constants for scoring
-MEAN_SPEED_DIFF_PROP_CONST = 2
-DURATION_PROP_CONST = 1
-DISTANCE_PROP_CONST = 1.25
-
-def scoreRun(person, goal, run):
-    score = 0
-    score += goal.check()
-
-    (duration_avg, mean_speed_avg, distance_avg) = person.getCurrentWeekAverages() 
-    (duration_total, mean_speed_total, distance_total) = person.getTotalAverages()
-    
-    duration_diff = duration_avg - duration_total
-    mean_speed_diff = mean_speed_avg - mean_speed_total
-    distance_diff = distance_avg - distance_total
-    
-    #currentRun = person.getMostRecentRun()
-    #duration_diff = currentRun.duration - duration_total
-    #mean_speed_diff = currentRun.mean_speed - mean_speed_total
-    #distance_diff = currentRun.distance - distance_total
-    
-    score += duration_diff * MEAN_SPEED_DIFF_PROP_CONST
-    score += mean_speed_diff * MEAN_SPEED_DIFF_PROP_CONST
-    score += distance_diff * DISTANCE_PROP_CONST
-    
-    print 'Score: ',
-    print score
-
-    return score
-
 
 def graphList(data):
     mu, std = norm.fit(data)
@@ -224,9 +192,19 @@ def doData():
     # saveDataToFile('data.txt', NUM_PAGES)
     #data = getDataFromFile('data.txt')
     makeGoals()
-
+    count = 0
     for x in range(0,NUM_PAGES):
-        addToLists(makeRequest(x))
+        addToLists(makeRequest(x), count)
+        count += 1
+
+#clone of doData but using data from a stored file
+def doDataFromFile(filePath):
+    makeGoals()
+
+    s = open(filePath, 'r').read()
+    j = json.loads(s)
+    #addToLists(getDataFromFile(filePath))
+    addToLists(j, 0)
 
 
 #helper to get a random run and return a json string to be sent into the API
@@ -248,12 +226,14 @@ def makeJsonOfRandomRun():
 
 # send data for the front end to utilize
 # current in proof of concept mode
-def sendDataToFrontEnd(strToSend):
+def sendDataToFrontEnd():
     #url = 'http://cms634fantasyrunningapp-fantasyrunning.rhcloud.com/data/addBackendDataToDatabase'
     url = 'http://localhost:6340/data/addBackendDataToDatabase'
 
     #data = makeJsonOfRandomRun()
     data = json.loads(people['a5da3bd1-35e3-4926-9857-d575fd3a40d3'].toJsonString())
+    print 'sending data: '
+    print data
     data = json.dumps({'person': data})
 
     req = urllib2.Request(url, data, {'Content-Type': 'application/json'})
@@ -262,22 +242,6 @@ def sendDataToFrontEnd(strToSend):
     print 'Successfully sent data. Response: ',
     print response
     f.close()
-
-
-#clone of doData but using data from a stored file
-def doDataFromFile():
-    makeGoals()
-
-    addToLists(getDataFromFile('data_store_10_pages'))
-
-'''
-class MyEncoder(json.JSONEncoder):
-    def default(self, obj):
-        if not (isinstance(obj, Run) or isinstance(obj, PersonClass) or isinstance(obj, Goal)):
-            return super(MyEncoder, self).default(obj)
-
-        return obj.__dict__
-'''
 
 def makePostQuery(url, data):
     req = urllib2.Request(url, data, {'Content-Type': 'application/json'})
@@ -294,21 +258,41 @@ def makeGetQuery(url):
 #main control loop
 def main():
     #saveDataToFile('data_store_10_pages', 10)
+    #doData()
+    doDataFromFile('onePageDirectlyFromAPIChangedIDs.txt')
 
-    doData()
-    #print json.dumps(people, cls=MyEncoder)
+    #sendDataToFrontEnd()
 
-    #sendDataToFrontEnd('testingStringToSend')
-
-    #response = makeGetQuery('http://cms634fantasyrunningapp-fantasyrunning.rhcloud.com/data/runs/a5da3bd1-35e3-4926-9857-d575fd3a40d3')
-    #response = makeGetQuery('http://localhost:6340/data/runs/a5da3bd1-35e3-4926-9857-d575fd3a40d3')
+    #response = makeGetQuery('http://cms634fantasyrunningapp-fantasyrunning.rhcloud.com/data/runs/54862a7d-717b-44b9-a1d4-c07e190a74fd')
+    #response = makeGetQuery('http://localhost:6340/data/runs/54862a7d-717b-44b9-a1d4-c07e190a74fd')
     #print 'response: ',
     #print response
+    '''
+    dataToSend = '{"people": ['
+    for person in people:
+        dataToSend += people[person].toJsonString() + ', '
+    dataToSend = dataToSend[:len(dataToSend) - 2]
+    dataToSend += ']}'
+    
+    #print dataToSend
 
-    print people
+    f = open('output.txt', 'w')
+    f.write(dataToSend)
+
+    print 'data saved to file'
+    '''
+
+    print people['73ad4cf4-95f8-4b9d-83e5-70782b54eaa1'].weeks
+
+    for i in people:
+        person = people[i]
+        if person.getTotalNumberOfRuns() > 10:
+            print person.getTotalNumberOfRuns()
+            print person.weeks
 
 
-    return
+    return 
+
 
     while True:
         #doDataFromFile()
@@ -357,6 +341,7 @@ def main():
             elif i == 'u':
                 graphList(l_dur)
 
+
 if __name__ == "__main__":
     main()
 
@@ -372,14 +357,4 @@ and split into teams to simulate an actual competition
 -figure out how to get data to front end
 -fix issue with runs not going to the proper people solely
 -put data into database
-'''
-
-
-
-'''
-4-20-16:
-sequence diagram of how process happens
-no monetary rewards - use raffle points?
-can goals be chosen by the team instead of the user?
-    problem is asymmetric teammates - adding another group would be confusing, and add complexity
 '''

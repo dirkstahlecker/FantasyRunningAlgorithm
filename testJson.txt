@@ -1,0 +1,256 @@
+{
+    "people": [{
+        "id": "1ad2005e-4cdc-4979-9c6b-bc53c2d856ef",
+        "goal": {
+            "params": {
+                "runAvgSpeed": "10",
+                "totalDistance": "60",
+                "numRuns": "3",
+                "runMinSpeed": "8",
+                "totalDuration": "60"
+            },
+            "completedValue": "15"
+        },
+        "currentWeek": "20151012",
+        "weeks": [{
+            "hash": "20151012",
+            "runs": [{
+                "duration": "16.2666666667",
+                "mean_speed": "10.19297",
+                "distance": "1.706660145",
+                "date": "2015-10-15",
+                "score": "15.0"
+            }]
+        }]
+    }, {
+        "id": "b872959a-df2a-4475-b5f1-9d8d156abbfd",
+        "goal": {
+            "params": {
+                "runAvgSpeed": "10",
+                "totalDistance": "60",
+                "numRuns": "3",
+                "runMinSpeed": "8",
+                "totalDuration": "60"
+            },
+            "completedValue": "15"
+        },
+        "currentWeek": "20151119",
+        "weeks": [{
+            "hash": "20151119",
+            "runs": [{
+                "duration": "53.6333333333",
+                "mean_speed": "4.53353",
+                "distance": "2.04502131",
+                "date": "2015-11-24",
+                "score": "15.0"
+            }]
+        }]
+    }, {
+        "id": "a976e3db-3751-4e39-a646-33f92220fa65",
+        "goal": {
+            "params": {
+                "runAvgSpeed": "10",
+                "totalDistance": "60",
+                "numRuns": "3",
+                "runMinSpeed": "8",
+                "totalDuration": "60"
+            },
+            "completedValue": "15"
+        },
+        "currentWeek": "20151025",
+        "weeks": [{
+            "hash": "20151025",
+            "runs": [{
+                "duration": "48.7833333333",
+                "mean_speed": "11.33494",
+                "distance": "5.721146316",
+                "date": "2015-10-25",
+                "score": "15.0"
+            }]
+        }]
+    }, {
+        "id": "f0cbaf1d-0068-49e3-8b64-d2f9ce34714a",
+        "goal": {
+            "params": {
+                "runAvgSpeed": "10",
+                "totalDistance": "60",
+                "numRuns": "3",
+                "runMinSpeed": "8",
+                "totalDuration": "60"
+            },
+            "completedValue": "15"
+        },
+        "currentWeek": "20160126",
+        "weeks": [{
+            "hash": "20160126",
+            "runs": [{
+                "duration": "56.55",
+                "mean_speed": "10.6369",
+                "distance": "6.22497231",
+                "date": "2016-02-01",
+                "score": "15.0"
+            }]
+        }]
+    }, {
+        "id": "0ab1aada-9e44-4f65-80cd-7137ca0c99e6",
+        "goal": {
+            "params": {
+                "runAvgSpeed": "10",
+                "totalDistance": "60",
+                "numRuns": "3",
+                "runMinSpeed": "8",
+                "totalDuration": "60"
+            },
+            "completedValue": "15"
+        },
+        "currentWeek": "20151231",
+        "weeks": [{
+            "hash": "20151231",
+            "runs": [{
+                "duration": "32.8833333333",
+                "mean_speed": "8.703053",
+                "distance": "2.96066718",
+                "date": "2016-01-05",
+                "score": "15.0"
+            }]
+        }]
+    }, {
+        "id": "7e2097c7-a540-4ef7-a368-a71cf47249ce",
+        "goal": {
+            "params": {
+                "runAvgSpeed": "10",
+                "totalDistance": "60",
+                "numRuns": "3",
+                "runMinSpeed": "8",
+                "totalDuration": "60"
+            },
+            "completedValue": "15"
+        },
+        "currentWeek": "20151116",
+        "weeks": [{
+            "hash": "20151116",
+            "runs": [{
+                "duration": "24.05",
+                "mean_speed": "6.3438",
+                "distance": "1.578205053",
+                "date": "2015-11-19",
+                "score": "15.0"
+            }]
+        }]
+    }, {
+        "id": "5660c373-e679-4043-9d1c-715c0cfb602f",
+        "goal": {
+            "params": {
+                "runAvgSpeed": "10",
+                "totalDistance": "60",
+                "numRuns": "3",
+                "runMinSpeed": "8",
+                "totalDuration": "60"
+            },
+            "completedValue": "15"
+        },
+        "currentWeek": "20151018",
+        "weeks": [{
+            "hash": "20151018",
+            "runs": [{
+                "duration": "63.5166666667",
+                "mean_speed": "10.84233",
+                "distance": "7.11718785",
+                "date": "2015-10-18",
+                "score": "15.0"
+            }]
+        }]
+    }, {
+        "id": "43d21db3-491c-48a2-b9b7-69e642b0d81f",
+        "goal": {
+            "params": {
+                "runAvgSpeed": "10",
+                "totalDistance": "60",
+                "numRuns": "3",
+                "runMinSpeed": "8",
+                "totalDuration": "60"
+            },
+            "completedValue": "15"
+        },
+        "currentWeek": "20150911",
+        "weeks": [{
+            "hash": "20150911",
+            "runs": [{
+                "duration": "144.433333333",
+                "mean_speed": "8.813492",
+                "distance": "13.16350467",
+                "date": "2015-09-12",
+                "score": "15.0"
+            }]
+        }]
+    }, {
+        "id": "bc9f695f-a289-44ff-a456-91ab1530c39f",
+        "goal": {
+            "params": {
+                "runAvgSpeed": "10",
+                "totalDistance": "60",
+                "numRuns": "3",
+                "runMinSpeed": "8",
+                "totalDuration": "60"
+            },
+            "completedValue": "15"
+        },
+        "currentWeek": "20160104",
+        "weeks": [{
+            "hash": "20160104",
+            "runs": [{
+                "duration": "32.1666666667",
+                "mean_speed": "7.361535",
+                "distance": "2.450315097",
+                "date": "2016-01-07",
+                "score": "15.0"
+            }]
+        }]
+    }, {
+        "id": "b13dfb73-2d0d-4173-834a-47261fa62053",
+        "goal": {
+            "params": {
+                "runAvgSpeed": "10",
+                "totalDistance": "60",
+                "numRuns": "3",
+                "runMinSpeed": "8",
+                "totalDuration": "60"
+            },
+            "completedValue": "15"
+        },
+        "currentWeek": "20151212",
+        "weeks": [{
+            "hash": "20151212",
+            "runs": [{
+                "duration": "40.1",
+                "mean_speed": "8.558413",
+                "distance": "3.550297365",
+                "date": "2015-12-16",
+                "score": "15.0"
+            }]
+        }]
+    }, {
+        "id": "fc10d388-c5e9-4aed-bc58-5a3ba6238184",
+        "goal": {
+            "params": {
+                "runAvgSpeed": "10",
+                "totalDistance": "60",
+                "numRuns": "3",
+                "runMinSpeed": "8",
+                "totalDuration": "60"
+            },
+            "completedValue": "15"
+        },
+        "currentWeek": "20151221",
+        "weeks": [{
+            "hash": "20151221",
+            "runs": [{
+                "duration": "21.7333333333",
+                "mean_speed": "7.87543",
+                "distance": "2.38282668",
+                "date": "2015-12-24",
+                "score": "15.0"
+            }]
+        }]
+    }]
+}

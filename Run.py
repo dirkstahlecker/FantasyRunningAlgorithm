@@ -7,6 +7,32 @@ MAX_DURATION = 20*60 #20 hours in minutes
 MAX_YEAR = 2020
 MIN_YEAR = 1970
 
+
+#constants for scoring
+MEAN_SPEED_DIFF_PROP_CONST = 2
+DURATION_PROP_CONST = 1
+DISTANCE_PROP_CONST = 1.25
+
+def scoreRun(person, goal):
+    score = 0
+    score += goal.check()
+
+    (duration_avg, mean_speed_avg, distance_avg) = person.getCurrentWeekAverages() 
+    (duration_total, mean_speed_total, distance_total) = person.getTotalAverages()
+    
+    duration_diff = duration_avg - duration_total
+    mean_speed_diff = mean_speed_avg - mean_speed_total
+    distance_diff = distance_avg - distance_total
+    
+    score += duration_diff * MEAN_SPEED_DIFF_PROP_CONST
+    score += mean_speed_diff * MEAN_SPEED_DIFF_PROP_CONST
+    score += distance_diff * DISTANCE_PROP_CONST
+
+    if score != 15:
+        print score
+
+    return score
+
 def pullStatsFromRun(activity):
     duration = activity['duration']
     duration = float(duration) / 60; #convert to minutes
@@ -39,6 +65,7 @@ class Run:
     mean_speed = 0
     distance = 0
     date = None
+    score = 0
 
     def __init__(self, duration, mean_speed, distance, date):
         self.duration = duration
@@ -51,9 +78,13 @@ class Run:
         outStr += '"duration": "' + str(self.duration) + '", '
         outStr += '"mean_speed": "' + str(self.mean_speed) + '", '
         outStr += '"distance": "' + str(self.distance) + '", '
-        outStr += '"date": "' + str(self.date)
+        outStr += '"date": "' + str(self.date) + '", '
+        outStr += '"score": "' + str(self.score) 
         outStr += '"}'
         return outStr
+
+    def addScore(self, score):
+        self.score = score
     
     def toJsonString(self):
         return self.toString()

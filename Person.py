@@ -34,16 +34,14 @@ class PersonClass:
     #run: Run object
     def addRun(self, run):
         week = self.getWeekHashForDate(run.date)
-        print 'week: ',
-        print week
-        print 'hashed from this date: ',
-        print run.date
         if week > self.currentWeek:
             self. currentWeek = week
         try:
             self.weeks[week].append(run)
         except:
             self.weeks[week] = [run]
+
+        run.addScore(scoreRun(self, self.goal))
 
     def getRunsAtWeek(self, week):
         return self.weeks[week]
